@@ -1,3 +1,6 @@
+#!/usr/bin/env node
+
+
 import chalk from "chalk";
 import GetGitHubToken from "./lib/git-auth.js";
 import GetGitHubProfile from "./lib/git-profile.js";
