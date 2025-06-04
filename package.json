@@ -9,6 +9,8 @@
   },
   "files": [
     "lib/",
+    "dir/",
+    "auto_config/",
     "index.js",
     "README.md"
   ],
