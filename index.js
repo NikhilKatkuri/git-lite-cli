@@ -6,19 +6,15 @@ import GetGitHubToken from "./lib/git-auth.js";
 import GetGitHubProfile from "./lib/git-profile.js";
 import Option from "./lib/git-utils.js";
 import { GitClone, GitPush } from "./lib/git-cmds.js";
-
-import fs from 'fs';
-import path from 'path';
-
-const pkgPath = path.resolve(process.cwd(), 'package.json');
-const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf-8'));
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+const pkg = require('./package.json');
 
 const args = process.argv.slice(2);
 if (args.includes('--version') || args.includes('-v')) {
     console.log(`git-lite-cli version: ${pkg.version}`);
     process.exit(0);
 }
-
 
 const token = await GetGitHubToken();
 const bool = await GetGitHubProfile(token);
