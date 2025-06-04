@@ -1,7 +1,7 @@
 # 🚀 Git-Lite CLI – Simplifying GitHub from Your Terminal
 
 # 👋 Hi, I'm Nikhil – Creator of Git-Lite CLI
-Git-Lite CLI is a beginner-friendly, interactive command-line tool designed to simplify GitHub workflows like pushing and cloning repositories.\
+Git-Lite CLI is a beginner-friendly, interactive command-line tool designed to simplify GitHub workflows like pushing and cloning repositories.
 - ✅ No complex Git commands
 - ✅ No setup headaches
 - ✅ Just a clean, intuitive experience — perfect for beginners and pros alike.\
@@ -34,7 +34,7 @@ git-lite
 
 First-Time Setup
 - You'll be prompted to enter a GitHub Personal Access Token
- 👉 Generate your token here[https://github.com/settings/tokens/new]
+ 👉 Generate your token here[https://github.com/settings/tokens]
 - Token and GitHub profile will be securely saved locally
 
 
