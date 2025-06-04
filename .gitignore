@@ -1,6 +1,9 @@
 # Node.js dependencies
 node_modules/
 
+#workflow
+giticonfig/
+
 # Build output
 dist/
 build/
