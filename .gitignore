@@ -1,0 +1,66 @@
+# Node.js dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+lib/
+out/
+
+# TypeScript
+*.tsbuildinfo
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# dotenv environment variables
+.env
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors / IDEs
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Coverage reports
+coverage/
+
+# Optional npm cache directory
+.npm/
+
+# ESLint cache
+.eslintcache
+
+# Parcel / Next.js
+.next/
+.cache/
+
+# Testing
+test-output/
+jest-output/
+
+# Others
+*.tgz
+*.zip
+*.bak
+*.tmp
+*.swp
+
+# Git CLI specific
+config/
+*.token
+*.key
+*.crt
+*.pem
+*.pfx
