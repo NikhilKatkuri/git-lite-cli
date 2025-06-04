@@ -5,7 +5,7 @@ import chalk from "chalk";
 import GetGitHubToken from "./lib/git-auth.js";
 import GetGitHubProfile from "./lib/git-profile.js";
 import Option from "./lib/git-utils.js";
-import { GitPush } from "./lib/git-cmds.js";
+import { GitClone, GitPush } from "./lib/git-cmds.js";
 
 const token = await GetGitHubToken();
 const bool = await GetGitHubProfile(token);
@@ -21,7 +21,7 @@ const bool = await GetGitHubProfile(token);
                 break;
 
             case 'clone':
-                console.log(chalk.yellow("🚧 Clone feature not implemented yet."));
+               await GitClone();
                 break;
 
             case "exit":
