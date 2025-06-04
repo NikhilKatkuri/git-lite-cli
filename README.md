@@ -1,39 +1,44 @@
-# Shortly Ready to Use
+# 🚀 Git-Lite CLI – Simplifying GitHub from Your Terminal
 
-# 👋 Hi, I'm Nikhil – Introducing Git-Lite CLI
+# 👋 Hi, I'm Nikhil – Creator of Git-Lite CLI
+Git-Lite CLI is a beginner-friendly, interactive command-line tool designed to simplify GitHub workflows like pushing and cloning repositories.\
+- ✅ No complex Git commands
+- ✅ No setup headaches
+- ✅ Just a clean, intuitive experience — perfect for beginners and pros alike.\
 
-A beginner-friendly command-line tool designed to simplify GitHub workflows like pushing and cloning repositories.\
-No complex Git commands. No setup headaches. Just an easy, interactive experience for anyone getting started with Git and open source.\
-Built using Node.js, and made with ❤️ for developers who want to learn Git the clean way.
-
-
-
-
-
-# 🚀 Git-Lite CLI
-
-A lightweight, interactive CLI tool to streamline your Git workflow!
-Built using Node.js, this project helps developers easily push and clone repositories from the command line with an intuitive interface.
-
-> ✨ Perfect for beginners and pros who want a cleaner, minimal, and more automated Git experience.
-
----
-
-## 📦 Features
-
-- 🔐 GitHub token-based authentication (saved locally, securely)
+> Built using Node.js, and made with ❤️ for developers who want to learn Git the clean way.
+# ⚙️ Features
+- 🔐 GitHub token-based authentication (stored securely on your device)
 - 👤 GitHub user profile validation
 - 🚀 Push any local project to GitHub in seconds
-- 📥 Clone repositories with a guided UI
-- 📁 Auto `.gitignore` file generator
-- 📁 Auto `.gitTrace` file generator
-- 📄 Stores GitHub token and profile config securely in local files
-- ⏱️ Built-in loaders and prompts for a friendly UX
-- 🧠 Modular and open-source design
+- 📥 Clone repositories via interactive UI
+- 🧾 Auto-generates .gitignore and .gitTrace files
+- 🧠 Modular structure, easy to extend
+- 💬 Clean, colorful CLI with loaders and prompts
 
----
+# 💻 Installation & Usage
+Run Locally
+```bash
+npx git-lite-cli
+```
+Or install globally:
 
-## 📸 Preview
+```bash
+npm install -g git-lite-cli
+```
+Then run:
+
+```bash
+git-lite
+```
+
+First-Time Setup
+- You'll be prompted to enter a GitHub Personal Access Token
+ 👉 Generate your token here[https://github.com/settings/tokens/new]
+- Token and GitHub profile will be securely saved locally
+
+
+# 📸 Sample Workflow
 
 ```bash
 📦 Welcome to Git-Lite CLI
@@ -45,45 +50,31 @@ Built using Node.js, this project helps developers easily push and clone reposit
 ✔ Enter a commit message: pushed from git-lite-cli
 
 ✅ Successfully pushed to GitHub: git-lite-cli
-
-🤝 Contributions Welcome!
-Git-Lite CLI is an open-source project built for beginners—and we want you to help make it even better!
-Whether you want to add new features, improve the user experience, fix bugs, or just suggest ideas, your contributions are highly appreciated.
-
-Join us in making Git easier and friendlier for everyone! 🚀
-🚦 Usage
 ```
-```
-node index.js
-```
-First Run?
-You'll be prompted to enter your GitHub token.
 
-You can generate a token here.
-- Genarate Token [https://github.com/settings/tokens/new]
-- The token is saved locally.
-
-Your GitHub profile is fetched and cached.
-
-💡 Commands Available
-Feature	Description
-Push	Push current project to GitHub remotely
-Clone	Clone a repository from GitHub
-Exit	Exit the CLI
+# 💡 Available Commands
+| Feature | Description                       |
+| ------- | --------------------------------- |
+| Push    | Push local project to GitHub      |
+| Clone   | Clone a GitHub repo interactively |
+| Exit    | Exit the CLI tool                 |
 
 # 🧩 Tech Stack
-
-    -> Node.js\
-    -> Chalk\
-    -> Inquirer\
-    -> NanoSpinner\
-    -> Simple-Git\
-    -> Axios\
-    -> FS, Path modules\
-
+- Node.js
+- chalk – CLI coloring
+- inquirer – Interactive prompts
+- simple-git – Git wrapper
+- axios – API requests
+- nanospinner – Loading spinners
+- fs, path – Core Node.js modules
 
 # 🤝 Contributions Welcome!
-Git-Lite CLI is an open-source project built for beginners—and we want you to help make it even better!
-Whether you want to add new features, improve the user experience, fix bugs, or just suggest ideas, your contributions are highly appreciated.
 
-Join us in making Git easier and friendlier for everyone! 🚀
+Git-Lite CLI is open-source and beginner-friendly. Contributions are welcome — whether it’s:
+
+- Adding new features
+- Improving UX
+- Fixing bugs
+- Suggesting ideas
+
+📬 Let's make Git easier and friendlier for everyone!
