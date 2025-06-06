@@ -19,12 +19,12 @@ Git-Lite CLI is a beginner-friendly, interactive command-line tool designed to s
 # 💻 Installation & Usage
 Run Locally
 ```bash
-npx git-lite-cli
+npx git-lite-cli@latest
 ```
 Or install globally:
 
 ```bash
-npm install -g git-lite-cli
+npm install -g git-lite-cli@latest
 ```
 Then run:
 
