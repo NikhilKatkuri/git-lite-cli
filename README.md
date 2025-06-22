@@ -57,6 +57,7 @@ First-Time Setup
 | ------- | --------------------------------- |
 | Push    | Push local project to GitHub      |
 | Clone   | Clone a GitHub repo interactively |
+| Gitignore   | Generate .gitignore for your project |
 | Exit    | Exit the CLI tool                 |
 
 # 🧩 Tech Stack
