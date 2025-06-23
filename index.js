@@ -4,10 +4,10 @@ import chalk from "chalk";
 import GetGitHubToken from "./lib/git-auth.js";
 import GetGitHubProfile from "./lib/git-profile.js";
 import Option from "./lib/git-utils.js";
-import { GitClone, GitPush } from "./lib/git-cmds.js";
+import { GitClone, GitCreateRepo, GitPush } from "./lib/git-cmds.js";
 import generateGitignore from "./lib/features/git-ignore.js";
 import { createRequire } from 'module';
-
+import { GitDeleteToken } from "./lib/helpers/git-delete-token.js"
 const require = createRequire(import.meta.url);
 const pkg = require('./package.json');
 
@@ -25,6 +25,13 @@ switch (command) {
     case '--gi':
         await generateGitignore();
         process.exit(0);
+    case '--create':
+    case '--c':
+        await GitCreateRepo();
+        process.exit(0);
+    case '--sign-out':
+        await GitDeleteToken();
+        process.exit(0);
 
     case '--help':
     case '-h':
@@ -35,6 +42,8 @@ Commands:
   push                  Git push with prompts
   clone                 Git clone with prompts
   --gitignore, --gi     Generate .gitignore
+  --create, --c         create a new repo
+  --sign-out            delete token locally / signout from cli 
   --version, -v         Show CLI version
   --help, -h            Show help
         `);
@@ -65,10 +74,17 @@ if (bool) {
         case 'clone':
             await GitClone();
             break;
+        case 'create-repo':
+            await GitCreateRepo();
+            break;
 
         case 'generate-gitignore':
             await generateGitignore();
             break;
+        case 'delete-token':
+            await GitDeleteToken();
+            break;
+
 
         case "exit":
             console.log(chalk.gray("👋 Exiting Git-Lite CLI."));
