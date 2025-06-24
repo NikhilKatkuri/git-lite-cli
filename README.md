@@ -1,33 +1,29 @@
+# git-lite CLI, Simplifying GitHub from Your Terminal
 
+# Hi, I'm Nikhil, Creator of git-lite CLI
 
----
-
-# 🚀 Git-Lite CLI – Simplifying GitHub from Your Terminal
-
-# 👋 Hi, I'm Nikhil – Creator of Git-Lite CLI
-
-Git-Lite CLI is a beginner-friendly, interactive command-line tool designed to simplify GitHub workflows like pushing and cloning repositories.
+Git-Lite CLI is an easy-to-use, interactive command-line tool that makes GitHub workflows simpler. It helps with tasks like pushing and cloning repositories.
 
 * ✅ No complex Git commands
 * ✅ No setup headaches
-* ✅ Just a clean, intuitive experience — perfect for beginners and pros alike.
+* ✅ Just a clean, intuitive experience, perfect for beginners and experts alike.
 
-> Built using Node.js, and made with ❤️ for developers who want to learn Git the clean way.
+> Built with Node.js, this tool is made for developers who want to learn Git in a straightforward way.
 
 # ⚙️ Features
 
-* 🔐 GitHub token-based authentication (stored securely on your device)
+* 🔐 GitHub token-based authentication, stored securely on your device
 * 👤 GitHub user profile validation
 * 🚀 **Push any local project to GitHub in seconds**
-* 📥 **Clone repositories via interactive UI**
-* 📦 **Create GitHub repository (public/private) directly from CLI**
-* 🧹 **Delete saved GitHub token from local config**
+* 📥 **Clone repositories using an interactive UI**
+* 📦 **Create GitHub repository (public/private) directly from the CLI**
+* 🧹 **Delete saved GitHub token from local configuration**
 * 🧾 Auto-generates `.gitignore` and `.gitTrace` files
-* 🧠 **Advanced Framework Detection** with smart `.gitignore` support
+* 🧠 **Framework Detection** with smart `.gitignore` support
 * 💬 Clean, colorful CLI with loaders and prompts
 * 🧩 Modular structure, easy to extend
 
-# ✨ New in v1.2.0
+# ✨ New in v1.2.0 -- stable
 
 * 📦 **Create GitHub Repository** (public/private)
 * 🔑 **Delete saved GitHub Token**
@@ -56,9 +52,9 @@ git-lite
 
 ### First-Time Setup
 
-* You'll be prompted to enter a GitHub Personal Access Token
+* You'll be prompted to enter a GitHub Personal Access Token.
   👉 Generate your token here: [https://github.com/settings/tokens](https://github.com/settings/tokens)
-* Token and GitHub profile will be securely saved locally
+* Your token and GitHub profile will be safely saved.
 
 # 📸 Sample Workflow
 
@@ -84,7 +80,7 @@ git-lite
 | ------------ | -------------------------------------- |
 | Push         | Push local project to GitHub           |
 | Clone        | Clone a GitHub repo interactively      |
-| Create Repo  | Create GitHub repository from CLI      |
+| Create Repo  | Create a GitHub repository from the CLI      |
 | Gitignore    | Generate `.gitignore` for your project |
 | Delete Token | Delete saved GitHub token              |
 | Exit         | Exit the CLI tool                      |
@@ -92,19 +88,19 @@ git-lite
 # 🧩 Tech Stack
 
 * Node.js
-* chalk – CLI coloring
-* inquirer – Interactive prompts
-* simple-git – Git wrapper
-* axios – API requests
-* nanospinner – Loading spinners
-* fs, path – Core Node.js modules
+* chalk, CLI coloring
+* inquirer, Interactive prompts
+* simple-git, Git wrapper
+* axios, API requests
+* nanospinner, Loading spinners
+* fs, path, Core Node.js modules
 
 # 🤝 Contributions Welcome!
 
-Git-Lite CLI is open-source and beginner-friendly. Contributions are welcome — whether it’s:
+Git-Lite CLI is open-source and beginner-friendly. Contributions are welcome, whether it’s:
 
 * Adding new features
-* Improving UX
+* Improving user experience
 * Fixing bugs
 * Suggesting ideas
 
@@ -112,4 +108,7 @@ Git-Lite CLI is open-source and beginner-friendly. Contributions are welcome —
 
 ---
 
- 
+**Links**  
+👉 [GitHub Repo](https://github.com/yourusername/git-lite-cli)  
+👉 [npm Git-Lite CLI package](https://www.npmjs.com/package/git-lite-cli)  
+👉 [GitHub Automation CLI Tool - Demo Video](#)  

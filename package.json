@@ -24,7 +24,29 @@
     "nanospinner": "^1.2.2",
     "simple-git": "^3.27.0"
   },
-  "keywords": [],
+  "keywords": [
+    "git-lite-cli",
+    "git cli",
+    "github cli",
+    "git automation",
+    "git workflow tool",
+    "github workflow cli",
+    "git commands simplifier",
+    "git github automation",
+    "nodejs git cli",
+    "github repo creator cli",
+    "git-lite-cli",
+    "npm git cli tool",
+    "npm github cli",
+    "developer productivity git cli",
+    "command line git tool",
+    "git automation npm package",
+    "github automation npm cli",
+    "github project cli tool",
+    "terminal git tool",
+    "lightweight git cli",
+    "git cli for beginners"
+  ],
   "author": "",
   "license": "ISC"
 }
