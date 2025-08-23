@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 
-import { intro } from '@clack/prompts';
+import { intro, outro } from '@clack/prompts';
 import isAuth from './auth/isAuth.js';
 import { profile } from './auth/profile.js';
 import { isConnectedToInternet } from './utils/ICN.js';
 import prompt from './services/cli.js';
 import Greet from './utils/greetings.js';
 import createProject from './services/create.js';
+import push from './services/push.js';
 
 async function main() {
   // check internet connection
@@ -41,6 +42,7 @@ async function main() {
       await createProject(auth);
       break;
     case 'push':
+      await push();
       break;
     case 'pull':
       break;
@@ -53,6 +55,7 @@ async function main() {
     case 'profile':
       break;
   }
+  outro('Thank you for using GitCLI!');
 }
 
 await main();

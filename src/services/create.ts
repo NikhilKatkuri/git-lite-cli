@@ -2,7 +2,7 @@ import { confirm, note, text } from '@clack/prompts';
 import path, { basename } from 'path';
 import quickCommit from '../tasks/commit.js';
 import CROG from '../utils/crog.js';
-import { exec } from 'child_process';
+import excuter from '../utils/excuter.js';
 
 export default async function createProject(auth: string) {
   try {
@@ -36,6 +36,7 @@ export default async function createProject(auth: string) {
       name: project,
       description: description,
       isPublic: isPublic,
+      dir: dir,
     });
     note(`remote: ${url}`);
     const isPush = await confirm({
@@ -57,25 +58,7 @@ export default async function createProject(auth: string) {
       `git push -u origin main`,
     ];
 
-    for (const cmd of commands) {
-      await new Promise<void>((resolve, reject) => {
-        exec(cmd, { cwd: dir }, (error, stdout, stderr) => {
-          if (error) {
-            console.error(`Error executing command: ${cmd}`);
-            console.error(`Error: ${error.message}`);
-            reject(error);
-            return;
-          }
-          if (stderr) {
-            console.warn(`Warning: ${stderr}`);
-          }
-          if (stdout) {
-            console.log(`${stdout.trim()}`);
-          }
-          resolve();
-        });
-      });
-    }
+    await excuter(commands, { cwd: dir });
   } catch {
     process.exit(1);
   }
