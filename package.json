@@ -1,52 +1,73 @@
 {
-  "name": "git-lite-cli",
-  "version": "1.2.0",
-  "description": "A lightweight CLI for GitHub automation",
-  "type": "module",
-  "main": "index.js",
-  "bin": {
-    "git-lite": "index.js"
-  },
-  "files": [
-    "lib/",
-    "dir/",
-    "auto_config/",
-    "index.js",
-    "README.md"
+  "name": "git-lite",
+  "version": "2.0.0",
+  "description": "A lightweight CLI tool for seamless GitHub automation—create, initialize, and push repositories with a single command.",
+  "keywords": [
+    "GitHub",
+    "cli",
+    "automation",
+    "git",
+    "repository",
+    "repo-management",
+    "developer-tools",
+    "lightweight",
+    "command-line",
+    "workflow",
+    "productivity",
+    "devops",
+    "git-automation",
+    "project-setup",
+    "open-source"
   ],
+  "homepage": "https://github.com/NikhilKatkuri/git-lite-cli#readme",
+  "bugs": {
+    "url": "https://github.com/NikhilKatkuri/git-lite-cli/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NikhilKatkuri/git-lite-cli.git"
+  },
+  "license": "MIT",
+  "author": "NIKHIL KATKURI",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "git-lite": "dist/index.js"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    }
+  },
   "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "start": "node dist/index.js",
+    "cli": "npx tsx src/index.ts",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix",
+    "lint:check": "eslint src --ext .ts --max-warnings 0",
+    "check": "npm run format:check && npm run lint:check",
+    "fix": "npm run format && npm run lint:fix",
+    "clean": "rm -rf dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "axios": "^1.9.0",
-    "chalk": "^5.4.1",
-    "inquirer": "^12.6.3",
-    "nanospinner": "^1.2.2",
-    "simple-git": "^3.27.0"
+    "@clack/prompts": "^0.11.0",
+    "axios": "^1.11.0"
   },
-  "keywords": [
-    "git-lite-cli",
-    "git cli",
-    "github cli",
-    "git automation",
-    "git workflow tool",
-    "github workflow cli",
-    "git commands simplifier",
-    "git github automation",
-    "nodejs git cli",
-    "github repo creator cli",
-    "git-lite-cli",
-    "npm git cli tool",
-    "npm github cli",
-    "developer productivity git cli",
-    "command line git tool",
-    "git automation npm package",
-    "github automation npm cli",
-    "github project cli tool",
-    "terminal git tool",
-    "lightweight git cli",
-    "git cli for beginners"
-  ],
-  "author": "",
-  "license": "ISC"
+  "devDependencies": {
+    "@eslint/js": "^9.34.0",
+    "@types/node": "^24.3.0",
+    "@typescript-eslint/eslint-plugin": "^8.40.0",
+    "@typescript-eslint/parser": "^8.40.0",
+    "eslint": "^9.34.0",
+    "eslint-config-prettier": "^10.1.8",
+    "prettier": "3.6.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
+  }
 }
