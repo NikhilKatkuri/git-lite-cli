@@ -1,4 +1,7 @@
-import { text } from '@clack/prompts';
+import { select, text } from '@clack/prompts';
+import { getConfig } from '../dir/config_root.js';
+import isGitRepo from '../utils/isGit.js';
+import excuter from '../utils/excuter.js';
 
 const initialCommits: string[] = [
   `Initialize project structure for /m/project/m/, pushed via gitlite`,
@@ -28,4 +31,71 @@ export default async function quickCommit(projectname: string) {
     defaultValue: rc ?? '',
   });
   return msg;
+}
+
+async function handleCommit() {
+  const projectname = getConfig().name;
+  if (!projectname) {
+    return;
+  }
+  const msg = (await quickCommit(projectname)) as string;
+  const cmd = `git commit -m "${msg}"`;
+  await excuter([cmd]);
+}
+
+async function handleDeleteCommit() {
+  const action = await select({
+    message: 'How do you want to delete the commit?',
+    options: [
+      {
+        value: 'soft',
+        label: 'Soft reset (keep changes in working directory)',
+      },
+      { value: 'mixed', label: 'Mixed reset (keep changes unstaged)' },
+      { value: 'hard', label: 'Hard reset (discard all changes)' },
+    ],
+  });
+
+  let cmd = '';
+  switch (action) {
+    case 'soft':
+      cmd = 'git reset --soft HEAD~1';
+      break;
+    case 'mixed':
+      cmd = 'git reset --mixed HEAD~1';
+      break;
+    case 'hard':
+      cmd = 'git reset --hard HEAD~1';
+      break;
+    default:
+      console.log('Invalid option selected');
+      return;
+  }
+
+  console.log(`Executing: ${cmd}`);
+  await excuter([cmd]);
+  console.log('Previous commit has been deleted');
+}
+
+export async function Commit() {
+  const bool = await isGitRepo();
+  if (!bool) {
+    console.log('Not a git repository');
+    return;
+  }
+  const action = await select({
+    message: 'what do you want to do?',
+    options: [
+      { value: 'quick-commit', label: 'Commit the changes' },
+      { value: 'delete-commit', label: 'Delete Commit' },
+    ],
+  });
+  switch (action) {
+    case 'quick-commit':
+      handleCommit();
+      break;
+    case 'delete-commit':
+      handleDeleteCommit();
+      break;
+  }
 }

@@ -1,6 +1,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import path from 'path';
 import type { RepoConfig } from '../types/RepoConfig.js';
+import { access } from 'fs/promises';
 export default async function configRoot(dir: string) {
   const configDir = path.join(dir, '.gitlite');
 
@@ -35,13 +36,18 @@ export default async function configRoot(dir: string) {
 }
 
 export function getConfig(): RepoConfig {
-  const read = readFileSync(
-    path.join(process.cwd(), '.gitlite', 'config.json'),
-    { encoding: 'utf-8' }
-  );
-  const json = JSON.parse(read);
-  return json;
+  const file = path.join(process.cwd(), '.gitlite', 'config.json');
+  try {
+    access(file);
+    const read = readFileSync(file, { encoding: 'utf-8' });
+    const json = JSON.parse(read);
+    return json;
+  } catch {
+    console.log('Error reading config file');
+    process.exit(1);
+  }
 }
+
 export function updateConfig(newConfig: RepoConfig, dir: string): void {
   writeFileSync(
     path.join(dir, '.gitlite', 'config.json'),

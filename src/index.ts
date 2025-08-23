@@ -8,6 +8,7 @@ import prompt from './services/cli.js';
 import Greet from './utils/greetings.js';
 import createProject from './services/create.js';
 import push from './services/push.js';
+import { Commit } from './tasks/commit.js';
 
 async function main() {
   // check internet connection
@@ -47,6 +48,7 @@ async function main() {
     case 'pull':
       break;
     case 'commits':
+      Commit();
       break;
     case 'branch':
       break;
