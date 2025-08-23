@@ -59,7 +59,7 @@ export default async function createProject(auth: string) {
 
     for (const cmd of commands) {
       await new Promise<void>((resolve, reject) => {
-        exec(cmd, (error, stdout, stderr) => {
+        exec(cmd, { cwd: dir }, (error, stdout, stderr) => {
           if (error) {
             console.error(`Error executing command: ${cmd}`);
             console.error(`Error: ${error.message}`);
