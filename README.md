@@ -1,6 +1,6 @@
 # git-lite CLI, Simplifying GitHub from Your Terminal
 
-[![npm version](https://img.shields.io/npm/v/git-lite.svg)](https://www.npmjs.com/package/git-lite)
+[![npm version](https://img.shields.io/npm/v/git-lite-cli.svg)](https://www.npmjs.com/package/git-lite-cli)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 # Hi, I'm Nikhil, Creator of git-lite CLI
@@ -41,19 +41,19 @@
 ### Run Locally
 
 ```bash
-npx git-lite
+npx git-lite-cli
 ```
 
 ### Or install globally:
 
 ```bash
-npm install -g git-lite
+npm install -g git-lite-cli
 ```
 
 Then run:
 
 ```bash
-git-lite
+git-lite-cli
 ```
 
 ### First-Time Setup
@@ -75,7 +75,7 @@ Welcome to Git-Lite CLI
 
 ✔ Choose what you want to do: Push code to the repository
 ✔ Enter the local project path: .
-✔ Enter commit message: Initial commit from git-lite
+✔ Enter commit message: Initial commit from git-lite-cli
 
 ✅ Successfully pushed to GitHub: https://github.com/NikhilKatkuri/my-awesome-project.git
 ```
@@ -115,8 +115,8 @@ Welcome to Git-Lite CLI
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/NikhilKatkuri/git-lite.git
-   cd git-lite
+   git clone https://github.com/NikhilKatkuri/git-lite-cli.git
+   cd git-lite-cli
    ```
 
 2. **Install dependencies:**
@@ -215,13 +215,13 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Issues
 
-If you encounter any issues or have suggestions, please [open an issue](https://github.com/NikhilKatkuri/git-lite/issues) on GitHub.
+If you encounter any issues or have suggestions, please [open an issue](https://github.com/NikhilKatkuri/git-lite-cli/issues) on GitHub.
 
 ---
 
 **Links**  
-[GitHub Repo](https://github.com/NikhilKatkuri/git-lite)  
-[npm Git-Lite CLI package](https://www.npmjs.com/package/git-lite)  
+[GitHub Repo](https://github.com/NikhilKatkuri/git-lite-cli)  
+[npm Git-Lite CLI package](https://www.npmjs.com/package/git-lite-cli)  
 [Demo Video - Coming Soon](#)
 
 ---

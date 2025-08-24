@@ -1,5 +1,5 @@
 {
-  "name": "git-lite",
+  "name": "git-lite-cli",
   "version": "2.0.0",
   "description": "A lightweight CLI tool for seamless GitHub automation—create, initialize, and push repositories with a single command.",
   "keywords": [
@@ -19,20 +19,20 @@
     "project-setup",
     "open-source"
   ],
-  "homepage": "https://github.com/NikhilKatkuri/git-lite#readme",
+  "homepage": "https://github.com/NikhilKatkuri/git-lite-cli#readme",
   "bugs": {
-    "url": "https://github.com/NikhilKatkuri/git-lite/issues"
+    "url": "https://github.com/NikhilKatkuri/git-lite-cli/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/NikhilKatkuri/git-lite.git"
+    "url": "git+https://github.com/NikhilKatkuri/git-lite-cli.git"
   },
   "license": "MIT",
   "author": "NIKHIL KATKURI",
   "type": "module",
   "main": "dist/index.js",
   "bin": {
-    "git-lite": "dist/index.js"
+    "git-lite-cli": "dist/index.js"
   },
   "exports": {
     ".": {

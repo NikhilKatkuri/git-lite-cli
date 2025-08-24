@@ -29,14 +29,14 @@ By participating in this project, you are expected to uphold our Code of Conduct
 2. **Clone your fork** locally:
 
    ```bash
-   git clone https://github.com/your-username/git-lite.git
-   cd git-lite
+   git clone https://github.com/your-username/git-lite-cli.git
+   cd git-lite-cli
    ```
 
 3. **Add the upstream remote**:
 
    ```bash
-   git remote add upstream https://github.com/NikhilKatkuri/git-lite.git
+   git remote add upstream https://github.com/NikhilKatkuri/git-lite-cli.git
    ```
 
 4. **Install dependencies**:
