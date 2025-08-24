@@ -10,6 +10,7 @@ import createProject from './services/create.js';
 import push from './services/push.js';
 import { Commit } from './tasks/commit.js';
 import cloneTask from './tasks/clone.js';
+import profileTask from './tasks/profileTask.js';
 
 async function main() {
   // check internet connection
@@ -57,6 +58,7 @@ async function main() {
       await cloneTask(auth, userProfile.login);
       break;
     case 'profile':
+      await profileTask(auth);
       break;
   }
   outro('Thank you for using GitCLI!');
