@@ -13,6 +13,7 @@ import cloneTask from './tasks/clone.js';
 import profileTask from './tasks/profileTask.js';
 import pullTask from './tasks/pull.js';
 import branchTask from './tasks/branchTask.js';
+import gitIgnoreGen from './services/gitIgnoreGen.js';
 
 async function main() {
   // check internet connection
@@ -57,6 +58,9 @@ async function main() {
       break;
     case 'branch':
       await branchTask();
+      break;
+    case 'gitignore':
+      await gitIgnoreGen();
       break;
     case 'clone':
       await cloneTask(auth, userProfile.login);

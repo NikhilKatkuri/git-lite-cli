@@ -25,6 +25,10 @@ export default async function prompt() {
         label: 'Manage branch',
       },
       {
+        value: 'gitignore',
+        label: 'generate an .gitignore file',
+      },
+      {
         value: 'clone',
         label: 'Clone a Git repository',
       },
