@@ -19,13 +19,13 @@
     "project-setup",
     "open-source"
   ],
-  "homepage": "https://github.com/NikhilKatkuri/git-lite-cli#readme",
+  "homepage": "https://github.com/NikhilKatkuri/git-lite#readme",
   "bugs": {
-    "url": "https://github.com/NikhilKatkuri/git-lite-cli/issues"
+    "url": "https://github.com/NikhilKatkuri/git-lite/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/NikhilKatkuri/git-lite-cli.git"
+    "url": "git+https://github.com/NikhilKatkuri/git-lite.git"
   },
   "license": "MIT",
   "author": "NIKHIL KATKURI",
