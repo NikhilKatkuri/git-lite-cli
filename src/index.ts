@@ -14,8 +14,15 @@ import profileTask from './tasks/profileTask.js';
 import pullTask from './tasks/pull.js';
 import branchTask from './tasks/branchTask.js';
 import gitIgnoreGen from './services/gitIgnoreGen.js';
+import { handleCliArgs } from './utils/cliArgs.js';
 
 async function main() {
+  // Handle command line arguments first
+  const shouldExit = handleCliArgs();
+  if (shouldExit) {
+    process.exit(0);
+  }
+
   // check internet connection
   const isConnection = await isConnectedToInternet();
   if (!isConnection) {

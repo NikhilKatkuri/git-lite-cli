@@ -56,6 +56,16 @@ Then run:
 git-lite-cli
 ```
 
+### Command Line Options
+
+```bash
+git-lite-cli                # Run the interactive CLI
+git-lite-cli --version      # Show version number
+git-lite-cli -v             # Show version number (short)
+git-lite-cli --help         # Show help information
+git-lite-cli -h             # Show help information (short)
+```
+
 ### First-Time Setup
 
 - You'll be prompted to enter a GitHub Personal Access Token.
