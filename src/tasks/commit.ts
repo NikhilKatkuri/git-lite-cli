@@ -2,6 +2,7 @@ import { select, text } from '@clack/prompts';
 import { getConfig } from '../dir/config_root.js';
 import isGitRepo from '../utils/isGit.js';
 import excuter from '../utils/excuter.js';
+import { handleCancel } from '../utils/promptHandler.js';
 
 const initialCommits: string[] = [
   `Initialize project structure for /m/project/m/, pushed via gitlite`,
@@ -30,7 +31,9 @@ export default async function quickCommit(projectname: string) {
     placeholder: 'commit message',
     defaultValue: rc ?? '',
   });
-  return msg;
+
+  handleCancel(msg);
+  return msg as string;
 }
 
 async function handleCommit() {
@@ -57,6 +60,8 @@ async function handleDeleteCommit() {
       { value: 'hard', label: 'Hard reset (discard all changes)' },
     ],
   });
+
+  handleCancel(action);
 
   let cmd = '';
   switch (action) {
@@ -92,6 +97,9 @@ export async function Commit() {
       { value: 'delete-commit', label: 'Delete Commit' },
     ],
   });
+
+  handleCancel(action);
+
   switch (action) {
     case 'quick-commit':
       await handleCommit();

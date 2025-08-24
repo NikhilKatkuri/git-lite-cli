@@ -1,19 +1,26 @@
 import { confirm, select, text } from '@clack/prompts';
+import { handleCancel } from '../utils/promptHandler.js';
 
 export default async function branch(branches: string[]) {
   const isNewBranch = await confirm({
     message: 'do you want to create a new branch?',
   });
+
+  handleCancel(isNewBranch);
+
   if (isNewBranch) {
-    const newBranch = (await text({
+    const newBranch = await text({
       message: 'Enter the name of the new branch:',
-    })) as string;
+    });
+
+    handleCancel(newBranch);
+
     return {
-      branch: newBranch,
-      isNewBranch: isNewBranch,
+      branch: newBranch as string,
+      isNewBranch: isNewBranch as boolean,
     };
   }
-  const branch = (await select({
+  const branch = await select({
     message: 'Which branch do you want to switch to?',
     options: [
       ...branches.map((branch) => ({
@@ -21,9 +28,12 @@ export default async function branch(branches: string[]) {
         label: branch,
       })),
     ],
-  })) as string;
+  });
+
+  handleCancel(branch);
+
   return {
-    branch: branch,
-    isNewBranch: isNewBranch,
+    branch: branch as string,
+    isNewBranch: isNewBranch as boolean,
   };
 }

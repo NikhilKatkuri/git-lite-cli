@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { intro, outro } from '@clack/prompts';
+import { intro, outro, cancel } from '@clack/prompts';
 import isAuth from './auth/isAuth.js';
 import { profile } from './auth/profile.js';
 import { isConnectedToInternet } from './utils/ICN.js';
@@ -16,7 +16,23 @@ import branchTask from './tasks/branchTask.js';
 import gitIgnoreGen from './services/gitIgnoreGen.js';
 import { handleCliArgs } from './utils/cliArgs.js';
 
+// Handle Ctrl+C (SIGINT) gracefully
+function setupSignalHandlers() {
+  process.on('SIGINT', () => {
+    cancel('Operation cancelled by user');
+    process.exit(0);
+  });
+
+  process.on('SIGTERM', () => {
+    cancel('Operation terminated');
+    process.exit(0);
+  });
+}
+
 async function main() {
+  // Setup signal handlers for graceful exit
+  setupSignalHandlers();
+
   // Handle command line arguments first
   const shouldExit = handleCliArgs();
   if (shouldExit) {

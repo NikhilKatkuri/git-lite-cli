@@ -1,7 +1,8 @@
 import { select } from '@clack/prompts';
+import { handleCancel } from '../utils/promptHandler.js';
 
 export default async function prompt() {
-  const action = (await select({
+  const action = await select({
     message: 'what would you like to do?',
     options: [
       {
@@ -37,6 +38,8 @@ export default async function prompt() {
         label: 'Manage profile',
       },
     ],
-  })) as string;
-  return action;
+  });
+
+  handleCancel(action);
+  return action as string;
 }

@@ -7,6 +7,7 @@ import branch from './branch.js';
 import getRepo, { getRepoName } from '../utils/repo.js';
 import { getCommitPushStatus, getSimpleRepoInfo } from '../utils/gcp.js';
 import path from 'path';
+import { handleCancel } from '../utils/promptHandler.js';
 
 export default async function push(auth: string, profile: string) {
   const cmds: string[] = [];
@@ -18,16 +19,22 @@ export default async function push(auth: string, profile: string) {
   const config = await configRoot(process.cwd());
   const url = config.verify();
   if (!url) {
-    const repoName = (await text({
+    const repoName = await text({
       message: 'Enter the remote repository URL:',
-    })) as string;
-    const localDir = (await text({
+    });
+
+    handleCancel(repoName);
+
+    const localDir = await text({
       message: 'Enter the local directory path:',
       defaultValue: '.',
       placeholder: '.',
-    })) as string;
-    const dir = path.resolve(process.cwd(), localDir);
-    await getRepo(profile, getRepoName(repoName), auth, dir);
+    });
+
+    handleCancel(localDir);
+
+    const dir = path.resolve(process.cwd(), localDir as string);
+    await getRepo(profile, getRepoName(repoName as string), auth, dir);
   }
   const data = getConfig();
   if (!data.local_dir || !data || !data.name) {

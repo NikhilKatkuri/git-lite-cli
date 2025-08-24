@@ -3,27 +3,34 @@ import path from 'path';
 import { existsSync } from 'fs';
 import excuter from '../utils/excuter.js';
 import isGitRepo from '../utils/isGit.js';
+import { handleCancel } from '../utils/promptHandler.js';
 
 async function handlePull(dir: string, commands: string[]) {
   await excuter(commands, { cwd: dir });
 }
 async function handleDepth(dir: string, branch: string) {
-  const depthLevel = (await text({
+  const depthLevel = await text({
     message: 'depth level',
     defaultValue: '1',
     initialValue: '1',
-  })) as string;
-  await handlePull(dir, [`git pull --depth=${depthLevel} origin ${branch}`]);
+  });
+
+  handleCancel(depthLevel);
+  await handlePull(dir, [
+    `git pull --depth=${depthLevel as string} origin ${branch}`,
+  ]);
 }
 
 export default async function pullTask() {
-  const selectedDir = (await text({
+  const selectedDir = await text({
     message: 'Enter the directory to pull changes from:',
     placeholder: '.',
     defaultValue: '.',
-  })) as string;
+  });
 
-  const dir = path.resolve(process.cwd(), selectedDir);
+  handleCancel(selectedDir);
+
+  const dir = path.resolve(process.cwd(), selectedDir as string);
 
   if (!existsSync(dir)) {
     console.error(`Directory does not exist: ${dir}`);
@@ -46,39 +53,46 @@ export default async function pullTask() {
       { value: 'shallow', label: 'Shallow Pulls' },
     ],
   });
-  const branch = (await text({
+
+  handleCancel(action);
+
+  const branch = await text({
     message: 'Enter the branch to pull changes from:',
     placeholder: 'main',
     defaultValue: 'main',
-  })) as string;
+  });
+
+  handleCancel(branch);
+
+  const branchName = branch as string;
 
   switch (action) {
     case 'pull':
-      await handlePull(dir, [`git pull origin ${branch}`]);
+      await handlePull(dir, [`git pull origin ${branchName}`]);
       break;
     case 'rebase':
       await handlePull(dir, [
-        `git checkout ${branch}`,
-        `git fetch origin ${branch}`,
-        `git rebase origin/${branch}`,
+        `git checkout ${branchName}`,
+        `git fetch origin ${branchName}`,
+        `git rebase origin/${branchName}`,
       ]);
       break;
     case 'ff-only':
       await handlePull(dir, [
-        `git checkout ${branch}`,
-        `git fetch origin ${branch}`,
-        `git merge --ff-only origin/${branch}`,
+        `git checkout ${branchName}`,
+        `git fetch origin ${branchName}`,
+        `git merge --ff-only origin/${branchName}`,
       ]);
       break;
     case 'squash':
       await handlePull(dir, [
-        `git checkout ${branch}`,
-        `git fetch origin ${branch}`,
-        `git merge --squash origin/${branch}`,
+        `git checkout ${branchName}`,
+        `git fetch origin ${branchName}`,
+        `git merge --squash origin/${branchName}`,
       ]);
       break;
     case 'shallow':
-      await handleDepth(dir, branch);
+      await handleDepth(dir, branchName);
       break;
   }
 }
