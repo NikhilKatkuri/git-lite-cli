@@ -11,6 +11,7 @@ import push from './services/push.js';
 import { Commit } from './tasks/commit.js';
 import cloneTask from './tasks/clone.js';
 import profileTask from './tasks/profileTask.js';
+import pullTask from './tasks/pull.js';
 
 async function main() {
   // check internet connection
@@ -48,9 +49,10 @@ async function main() {
       await push(auth, userProfile.login);
       break;
     case 'pull':
+      await pullTask();
       break;
     case 'commits':
-      Commit();
+      await Commit();
       break;
     case 'branch':
       break;

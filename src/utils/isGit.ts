@@ -1,14 +1,17 @@
 import { exec } from 'child_process';
 
-export default async function isGitRepo() {
+export default async function isGitRepo(): Promise<boolean> {
   const dir = process.cwd();
   try {
-    exec('git rev-parse --is-inside-work-tree', { cwd: dir }, (error) => {
-      if (error) {
-        return false;
-      }
+    return new Promise<boolean>((resolve) => {
+      exec('git rev-parse --is-inside-work-tree', { cwd: dir }, (error) => {
+        if (error) {
+          resolve(false);
+        } else {
+          resolve(true);
+        }
+      });
     });
-    return true;
   } catch {
     return false;
   }

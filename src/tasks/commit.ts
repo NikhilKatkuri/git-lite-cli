@@ -39,8 +39,10 @@ async function handleCommit() {
     return;
   }
   const msg = (await quickCommit(projectname)) as string;
-  const cmd = `git commit -m "${msg}"`;
-  await excuter([cmd]);
+  const cmd = [];
+  cmd.push('git add .');
+  cmd.push(`git commit -m "${msg}"`);
+  await excuter(cmd);
 }
 
 async function handleDeleteCommit() {
@@ -92,10 +94,10 @@ export async function Commit() {
   });
   switch (action) {
     case 'quick-commit':
-      handleCommit();
+      await handleCommit();
       break;
     case 'delete-commit':
-      handleDeleteCommit();
+      await handleDeleteCommit();
       break;
   }
 }
