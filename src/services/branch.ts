@@ -1,7 +1,5 @@
 import { confirm, select, text } from '@clack/prompts';
 
-export function quickBranch() {}
-
 export default async function branch(branches: string[]) {
   const isNewBranch = await confirm({
     message: 'do you want to create a new branch?',

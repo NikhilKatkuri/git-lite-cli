@@ -22,11 +22,14 @@ export async function fetchGitHubUser(token: string, file: string) {
 
     writeFileSync(file, JSON.stringify(data, null, 2));
     return data;
-  } catch (err: any) {
-    if (err.response) {
-      console.error('❌ GitHub API Error:', err.response.data.message);
-    } else {
+  } catch (err: unknown) {
+    if (err && typeof err === 'object' && 'response' in err && err.response) {
+      const response = err.response as { data: { message: string } };
+      console.error('❌ GitHub API Error:', response.data.message);
+    } else if (err instanceof Error) {
       console.error('❌ Network or Unknown Error:', err.message);
+    } else {
+      console.error('❌ Unknown Error:', String(err));
     }
     throw err;
   }

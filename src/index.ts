@@ -12,6 +12,7 @@ import { Commit } from './tasks/commit.js';
 import cloneTask from './tasks/clone.js';
 import profileTask from './tasks/profileTask.js';
 import pullTask from './tasks/pull.js';
+import branchTask from './tasks/branchTask.js';
 
 async function main() {
   // check internet connection
@@ -55,6 +56,7 @@ async function main() {
       await Commit();
       break;
     case 'branch':
+      await branchTask();
       break;
     case 'clone':
       await cloneTask(auth, userProfile.login);

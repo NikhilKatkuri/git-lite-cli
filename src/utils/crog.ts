@@ -70,10 +70,19 @@ export default async function CROG({
     });
 
     return res.data.html_url;
-  } catch (error: any) {
+  } catch (error: unknown) {
     if (
-      error.response?.data?.message ===
-      'Resource not accessible by personal access token'
+      error &&
+      typeof error === 'object' &&
+      'response' in error &&
+      error.response &&
+      typeof error.response === 'object' &&
+      'data' in error.response &&
+      error.response.data &&
+      typeof error.response.data === 'object' &&
+      'message' in error.response.data &&
+      error.response.data.message ===
+        'Resource not accessible by personal access token'
     ) {
       console.log(`ERROR: Token does not have permission to create repos.`);
       console.log(
@@ -83,9 +92,23 @@ export default async function CROG({
       return null;
     }
 
-    console.log(
-      `ERROR: Failed to create repo: ${error.response?.data?.message || error.message}`
-    );
+    const errorMessage =
+      error &&
+      typeof error === 'object' &&
+      'response' in error &&
+      error.response &&
+      typeof error.response === 'object' &&
+      'data' in error.response &&
+      error.response.data &&
+      typeof error.response.data === 'object' &&
+      'message' in error.response.data &&
+      typeof error.response.data.message === 'string'
+        ? error.response.data.message
+        : error instanceof Error
+          ? error.message
+          : 'Unknown error';
+
+    console.log(`ERROR: Failed to create repo: ${errorMessage}`);
     return null;
   }
 }
