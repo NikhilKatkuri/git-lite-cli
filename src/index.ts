@@ -43,7 +43,7 @@ async function main() {
       await createProject(auth);
       break;
     case 'push':
-      await push();
+      await push(auth, userProfile.login);
       break;
     case 'pull':
       break;

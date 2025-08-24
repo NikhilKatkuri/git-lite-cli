@@ -1,11 +1,13 @@
-import { outro } from '@clack/prompts';
+import { outro, text } from '@clack/prompts';
 import isGitRepo from '../utils/isGit.js';
 import quickCommit from '../tasks/commit.js';
 import configRoot, { getConfig, updateConfig } from '../dir/config_root.js';
 import excuter from '../utils/excuter.js';
 import branch from './branch.js';
+import getRepo, { getRepoName } from '../utils/repo.js';
+import path from 'path';
 
-export default async function push() {
+export default async function push(auth: string, profile: string) {
   const cmds: string[] = [];
   const bool = isGitRepo();
   if (!bool) {
@@ -15,8 +17,16 @@ export default async function push() {
   const config = await configRoot(process.cwd());
   const url = config.verify();
   if (!url) {
-    console.log('Remote URL not found');
-    process.exit(1);
+    const repoName = (await text({
+      message: 'Enter the remote repository URL:',
+    })) as string;
+    const localDir = (await text({
+      message: 'Enter the local directory path:',
+      defaultValue: '.',
+      placeholder: '.',
+    })) as string;
+    const dir = path.resolve(process.cwd(), localDir);
+    await getRepo(profile, getRepoName(repoName), auth, dir);
   }
   const data = getConfig();
   if (!data.local_dir || !data || !data.name) {

@@ -1,0 +1,34 @@
+{
+  "id": 995843187,
+  "local_dir": "C:\\Users\\Nikhi\\Projects\\opensource\\gitcli",
+  "node_id": "R_kgDOO1tccw",
+  "name": "git-lite-cli",
+  "full_name": "NikhilKatkuri/git-lite-cli",
+  "description": "🌟GitLite CLI is a lightweight command-line automation tool built to simplify common Git and GitHub workflows. It removes repetitive steps by offering a clean, interactive interface for creating repositories, pushing code, and managing branches — all from your terminal.",
+  "private": false,
+  "html_url": "https://github.com/NikhilKatkuri/git-lite-cli",
+  "owner": {
+    "login": "NikhilKatkuri",
+    "id": 202576342,
+    "node_id": "U_kgDODBMR1g",
+    "avatar_url": "https://avatars.githubusercontent.com/u/202576342?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/NikhilKatkuri",
+    "html_url": "https://github.com/NikhilKatkuri",
+    "followers_url": "https://api.github.com/users/NikhilKatkuri/followers",
+    "following_url": "https://api.github.com/users/NikhilKatkuri/following{/other_user}",
+    "gists_url": "https://api.github.com/users/NikhilKatkuri/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/NikhilKatkuri/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/NikhilKatkuri/subscriptions",
+    "organizations_url": "https://api.github.com/users/NikhilKatkuri/orgs",
+    "repos_url": "https://api.github.com/users/NikhilKatkuri/repos",
+    "events_url": "https://api.github.com/users/NikhilKatkuri/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/NikhilKatkuri/received_events",
+    "type": "User",
+    "user_view_type": "public",
+    "site_admin": false
+  },
+  "branches": [
+    "main"
+  ]
+}
