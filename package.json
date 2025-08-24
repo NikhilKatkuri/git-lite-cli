@@ -1,6 +1,6 @@
 {
   "name": "git-lite-cli",
-  "version": "2.0.1",
+  "version": "2.0.0",
   "description": "A lightweight CLI tool for seamless GitHub automation—create, initialize, and push repositories with a single command.",
   "keywords": [
     "GitHub",
