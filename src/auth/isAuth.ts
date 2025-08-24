@@ -37,10 +37,7 @@ async function isAuth() {
     profile(token).setProfile();
     outro('Token saved successfully!');
   }
-  const profileFile = profile(content.token).getProfile();
-  if (!profileFile) {
-    profile(content.token).setProfile();
-  }
+  await profile(content.token).setProfile();
   return content.token;
 }
 
