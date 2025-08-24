@@ -52,7 +52,8 @@
     "lint:check": "eslint src --ext .ts --max-warnings 0",
     "check": "npm run format:check && npm run lint:check",
     "fix": "npm run format && npm run lint:fix",
-    "clean": "rm -rf dist",
+    "clean": "if exist dist rmdir /s /q dist",
+    "prepublishOnly": "npm run clean && npm run build && npm run check",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
