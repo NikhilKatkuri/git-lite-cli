@@ -64,5 +64,5 @@ export default async function push(auth: string, profile: string) {
   } else {
     cmds.push(`git push -u origin HEAD:${selectedBranch.branch}`);
   }
-  await excuter(cmds, { cwd: data.local_dir });
+  await excuter(cmds, { cwd: data.local_dir, stdOut: false });
 }
