@@ -74,20 +74,53 @@ async function fetchGitHubTemplate(templateName: string): Promise<string> {
 async function getTemplateContent(
   framework: DetectedFramework
 ): Promise<string> {
+  let template: string;
+
   if (framework.githubTemplate) {
     try {
       console.log(`Fetching ${framework.name} template from GitHub...`);
-      const template = await fetchGitHubTemplate(framework.githubTemplate);
-      return template;
+      template = await fetchGitHubTemplate(framework.githubTemplate);
     } catch (error) {
       console.warn(
         `Failed to fetch GitHub template for ${framework.name}, using fallback:`,
-        error
+        error instanceof Error ? error.message : String(error)
       );
-      return framework.template; // Fallback to local template
+      template = framework.template; // Fallback to local template
     }
+  } else {
+    template = framework.template;
   }
-  return framework.template;
+
+  // Always add mandatory ignores
+  return addMandatoryIgnores(template);
+}
+
+function addMandatoryIgnores(template: string): string {
+  // Check if these are already present to avoid duplication
+  const lines = template.split('\n');
+  const hasGitlite = lines.some(
+    (line) => line.trim() === '.gitlite/' || line.trim() === '.gitlite'
+  );
+  const hasNodeModules = lines.some(
+    (line) => line.trim() === 'node_modules/' || line.trim() === 'node_modules'
+  );
+  const hasEnv = lines.some((line) => line.trim() === '.env');
+  const hasDist = lines.some(
+    (line) => line.trim() === 'dist/' || line.trim() === 'dist'
+  );
+  const hasBuild = lines.some(
+    (line) => line.trim() === 'build/' || line.trim() === 'build'
+  );
+
+  let additionalIgnores = '.vscode/';
+
+  if (!hasGitlite) additionalIgnores += '\n.gitlite/';
+  if (!hasNodeModules) additionalIgnores += '\nnode_modules/';
+  if (!hasEnv) additionalIgnores += '\n.env\n.env.local\n.env.*.local';
+  if (!hasDist) additionalIgnores += '\ndist/';
+  if (!hasBuild) additionalIgnores += '\nbuild/';
+
+  return template + (additionalIgnores ? '\n' + additionalIgnores : '');
 }
 
 async function getPopularTemplates(): Promise<DetectedFramework[]> {
@@ -120,7 +153,20 @@ async function getPopularTemplates(): Promise<DetectedFramework[]> {
 }
 
 async function detectFramework(dir: string): Promise<DetectedFramework[]> {
-  const readDir = readdirSync(dir);
+  let readDir: string[];
+  try {
+    readDir = readdirSync(dir);
+  } catch (error) {
+    console.error(`Error reading directory ${dir}:`, error);
+    return [
+      {
+        name: 'Generic',
+        confidence: 50,
+        template: getGenericGitignore(),
+      },
+    ];
+  }
+
   const frameworks: DetectedFramework[] = [];
 
   // Check if package.json exists for Node.js projects
@@ -804,7 +850,18 @@ export default async function gitIgnoreGen() {
     defaultValue: '.',
   })) as string;
 
+  if (typeof selectedDir === 'symbol') {
+    console.log('Operation cancelled.');
+    return;
+  }
+
   const dir = path.resolve(process.cwd(), selectedDir || '.');
+
+  // Validate directory exists
+  if (!existsSync(dir)) {
+    console.error(`Directory does not exist: ${dir}`);
+    return;
+  }
 
   console.log(`\nAnalyzing directory: ${dir}`);
 
@@ -832,6 +889,11 @@ export default async function gitIgnoreGen() {
         })
       : 'browse';
 
+  if (typeof useDetected === 'symbol') {
+    console.log('Operation cancelled.');
+    return;
+  }
+
   let availableFrameworks: DetectedFramework[];
 
   if (useDetected === 'detected' && frameworks.length > 0) {
@@ -856,14 +918,24 @@ export default async function gitIgnoreGen() {
   let selectedFramework: DetectedFramework;
 
   if (availableFrameworks.length === 1) {
+    const firstFramework = availableFrameworks[0];
+    if (!firstFramework) {
+      console.error('No frameworks available');
+      return;
+    }
+
     const useDetected = await confirm({
-      message: `Use template: ${availableFrameworks[0]?.name ?? 'Unknown'}?`,
+      message: `Use template: ${firstFramework.name}?`,
     });
 
-    selectedFramework =
-      useDetected && availableFrameworks[0]
-        ? availableFrameworks[0]
-        : { name: 'Generic', confidence: 50, template: getGenericGitignore() };
+    if (typeof useDetected === 'symbol') {
+      console.log('Operation cancelled.');
+      return;
+    }
+
+    selectedFramework = useDetected
+      ? firstFramework
+      : { name: 'Generic', confidence: 50, template: getGenericGitignore() };
   } else {
     const choice = (await select({
       message: 'Select a template:',
@@ -882,10 +954,22 @@ export default async function gitIgnoreGen() {
       ],
     })) as number;
 
-    selectedFramework =
-      choice === -1 || availableFrameworks[choice] === undefined
-        ? { name: 'Generic', confidence: 50, template: getGenericGitignore() }
-        : availableFrameworks[choice];
+    if (typeof choice === 'symbol') {
+      console.log('Operation cancelled.');
+      return;
+    }
+
+    const selectedIndex = typeof choice === 'number' ? choice : -1;
+    const selectedOption =
+      selectedIndex >= 0 && selectedIndex < availableFrameworks.length
+        ? availableFrameworks[selectedIndex]
+        : undefined;
+
+    selectedFramework = selectedOption || {
+      name: 'Generic',
+      confidence: 50,
+      template: getGenericGitignore(),
+    };
   }
 
   const gitignorePath = path.join(dir, '.gitignore');
@@ -895,7 +979,7 @@ export default async function gitIgnoreGen() {
       message: '.gitignore file already exists. Overwrite it?',
     });
 
-    if (!overwrite) {
+    if (typeof overwrite === 'symbol' || !overwrite) {
       console.log('Operation cancelled.');
       return;
     }
@@ -903,12 +987,21 @@ export default async function gitIgnoreGen() {
 
   try {
     const templateContent = await getTemplateContent(selectedFramework);
+
+    if (!templateContent) {
+      console.error('Failed to get template content');
+      return;
+    }
+
     writeFileSync(gitignorePath, templateContent);
     console.log(
       `\n.gitignore file generated successfully for ${selectedFramework.name}!`
     );
     console.log(`Location: ${gitignorePath}`);
   } catch (error) {
-    console.error('Error writing .gitignore file:', error);
+    console.error(
+      'Error writing .gitignore file:',
+      error instanceof Error ? error.message : String(error)
+    );
   }
 }
