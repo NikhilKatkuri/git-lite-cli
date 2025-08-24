@@ -1,11 +1,16 @@
 import { profile } from '../auth/profile.js';
+import showAvatarInline from '../utils/avatar.js';
 
 export default async function profileTask(auth: string) {
   const data = await profile(auth).setProfile();
-  console.log(`
+  console.log(
+    `
 =======================================
 GitHub Profile : ${data.login}
-=======================================
+=======================================`
+  );
+  await showAvatarInline(data.avatar_url);
+  console.log(`
 Username      : ${data.login}
 Name          : ${data.name}
 Bio           : ${data.bio}
