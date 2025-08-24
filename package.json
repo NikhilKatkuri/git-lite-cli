@@ -32,7 +32,8 @@
   "type": "module",
   "main": "dist/index.js",
   "bin": {
-    "git-lite-cli": "dist/index.js"
+    "git-lite-cli": "dist/index.js",
+    "glc": "dist/index.js"
   },
   "exports": {
     ".": {
