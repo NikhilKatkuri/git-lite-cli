@@ -2,7 +2,7 @@ import { exec } from 'child_process';
 
 export default async function excuter(
   commands: string[],
-  options: { cwd?: string } = {}
+  options: { cwd?: string; stdOut?: boolean } = {}
 ): Promise<void> {
   for (const cmd of commands) {
     await new Promise<void>((resolve, reject) => {
@@ -17,7 +17,9 @@ export default async function excuter(
           console.warn(`Warning: ${stderr}`);
         }
         if (stdout) {
-          console.log(`${stdout.trim()}`);
+          if (options.stdOut) {
+            console.log(`${stdout.trim()}`);
+          }
         }
         resolve();
       });
