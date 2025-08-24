@@ -14,7 +14,9 @@ export default async function excuter(
           return;
         }
         if (stderr) {
-          console.warn(`Warning: ${stderr}`);
+          if (options.stdOut) {
+            console.warn(`Warning: ${stderr}`);
+          }
         }
         if (stdout) {
           if (options.stdOut) {
