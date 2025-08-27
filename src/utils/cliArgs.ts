@@ -42,6 +42,12 @@ export function showHelp(): void {
   console.log('  -v, --version              Show version number');
   console.log('  -h, --help                 Show help information');
   console.log('');
+  console.log('Documentation:');
+  console.log('  📖 What is it used for?     docs/WHAT_IS_IT_USED_FOR.md');
+  console.log('  🚀 Quick Start Guide       docs/QUICK_START.md');
+  console.log('  🎯 Use Cases & Examples    docs/USE_CASES.md');
+  console.log('  ❓ FAQ                     docs/FAQ.md');
+  console.log('');
   console.log('Features:');
   console.log('  • Create GitHub repositories (public/private)');
   console.log('  • Push local projects to GitHub');

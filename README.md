@@ -1,17 +1,51 @@
-# git-lite CLI, Simplifying GitHub from Your Terminal
+# git-lite CLI - Git Made Simple 🚀
 
 [![npm version](https://img.shields.io/npm/v/git-lite-cli.svg)](https://www.npmjs.com/package/git-lite-cli)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+## 🎯 What is git-lite-cli?
+
+**A friendly, interactive CLI that makes Git and GitHub accessible to everyone** - no more memorizing complex commands!
+
+### ⚡ Try it now:
+
+```bash
+npx git-lite-cli
+```
+
+### 🎯 What it's used for:
+
+- **Create GitHub repositories** in seconds (public/private)
+- **Push your code** without remembering Git commands
+- **Clone repositories** with interactive selection
+- **Manage branches** visually and safely
+- **Pull updates** with guided merge strategies
+
+## 📚 Documentation
+
+- **[What is it used for?](docs/WHAT_IS_IT_USED_FOR.md)** - Complete explanation and benefits
+- **[Quick Start Guide](docs/QUICK_START.md)** - Get started in 3 steps
+- **[Use Cases & Examples](docs/USE_CASES.md)** - Real-world scenarios
+- **[FAQ](docs/FAQ.md)** - Common questions answered
+- **[Ctrl+C Handling](docs/CTRL_C_HANDLING.md)** - Technical implementation details
+
+## 🌟 Perfect for:
+
+- 👶 **Beginners** learning Git
+- 🚀 **Experienced developers** wanting faster workflows
+- 👨‍🏫 **Educators** teaching Git concepts
+- 🏢 **Teams** standardizing Git workflows
+
+---
+
 # Hi, I'm Nikhil, Creator of git-lite CLI
 
-🌟 GitLite CLI is a lightweight command-line automation tool built to simplify common Git and GitHub workflows. It removes repetitive steps by offering a clean, interactive interface for creating repositories, pushing code, and managing branches — all from your terminal.
+🌟 Built with Node.js and TypeScript, this tool transforms Git from a scary command-line interface into a friendly, interactive assistant.
 
-- No complex Git commands
-- No setup headaches
-- Just a clean, intuitive experience, perfect for beginners and experts alike.
-
-> Built with Node.js, this tool is made for developers who want to learn Git in a straightforward way.
+- ✅ No complex Git commands to memorize
+- ✅ No setup headaches
+- ✅ Clean, intuitive experience for beginners and experts
+- ✅ Focus on coding, not Git syntax
 
 # Features
 
@@ -36,46 +70,37 @@
 - **Better Branch Management**
 - **Enhanced CLI Experience** with @clack/prompts
 
-# Installation & Usage
+# 🚀 Installation & Usage
 
-### Run Locally
+## Fastest Way to Try
 
 ```bash
 npx git-lite-cli
 ```
 
-### Or install globally:
+## Install Globally
 
 ```bash
 npm install -g git-lite-cli
-```
-
-Then run:
-
-```bash
 git-lite-cli
 ```
 
-### Command Line Options
+## Command Line Options
 
 ```bash
-git-lite-cli                # Run the interactive CLI
-git-lite-cli --version      # Show version number
-git-lite-cli -v             # Show version number (short)
-git-lite-cli --help         # Show help information
-git-lite-cli -h             # Show help information (short)
+git-lite-cli                # Interactive CLI (main feature)
+git-lite-cli --version      # Show version
+git-lite-cli --help         # Show help
 ```
 
-### First-Time Setup
+**First time?** Check out our **[Quick Start Guide](docs/QUICK_START.md)** →
 
-- You'll be prompted to enter a GitHub Personal Access Token.
-  Generate your token here: [https://github.com/settings/tokens](https://github.com/settings/tokens)
-- Your token and GitHub profile will be safely saved.
+# ✨ Sample Workflow
 
-# Sample Workflow
+**See how easy it is:**
 
 ```bash
-Welcome to Git-Lite CLI
+npx git-lite-cli
 
 ✔ Welcome NikhilKatkuri!
 ✔ Choose what you want to do: Create a new Git repository
@@ -84,24 +109,27 @@ Welcome to Git-Lite CLI
 ✅ Repo created: https://github.com/NikhilKatkuri/my-awesome-project
 
 ✔ Choose what you want to do: Push code to the repository
-✔ Enter the local project path: .
 ✔ Enter commit message: Initial commit from git-lite-cli
 
-✅ Successfully pushed to GitHub: https://github.com/NikhilKatkuri/my-awesome-project.git
+✅ Successfully pushed to GitHub!
 ```
 
-# Available Commands
+**Want more examples?** See **[Use Cases & Examples](docs/USE_CASES.md)** →
 
-| Feature            | Description                                           |
-| ------------------ | ----------------------------------------------------- |
-| Create Repository  | Initialize new Git repositories locally and on GitHub |
-| Push Code          | Push local project to GitHub                          |
-| Pull Updates       | Fetch and merge changes from remote repository        |
-| Clone Repository   | Clone a GitHub repo interactively                     |
-| Manage Commits     | Handle commit operations                              |
-| Manage Branches    | Create, switch, and manage Git branches               |
-| Generate Gitignore | Generate `.gitignore` for your project                |
-| Manage Profile     | Configure and manage your GitHub profile              |
+# 🎯 Available Commands
+
+| Feature                | Description                           | Use Case                                 |
+| ---------------------- | ------------------------------------- | ---------------------------------------- |
+| **Create Repository**  | Initialize new repos locally + GitHub | Share your project with the world        |
+| **Push Code**          | Upload local changes to GitHub        | Save your progress, enable collaboration |
+| **Pull Updates**       | Fetch changes from remote repository  | Get teammate's latest code               |
+| **Clone Repository**   | Download repos interactively          | Work on existing projects                |
+| **Manage Commits**     | Handle commit operations easily       | Organize your code history               |
+| **Manage Branches**    | Create, switch, manage Git branches   | Develop features safely                  |
+| **Generate Gitignore** | Auto-create `.gitignore` files        | Keep unwanted files out of Git           |
+| **Manage Profile**     | Configure GitHub profile settings     | Set up your developer identity           |
+
+**Curious about when to use each?** Check **[Use Cases & Examples](docs/USE_CASES.md)** →
 
 # Tech Stack
 
