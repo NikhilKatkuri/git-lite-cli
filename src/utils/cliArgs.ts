@@ -10,7 +10,7 @@ const __dirname = dirname(__filename);
  */
 function getVersion(): string {
   try {
-    const packageJsonPath = join(__dirname, '..', 'package.json');
+    const packageJsonPath = join(__dirname, '..', '..', 'package.json');
     const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf8'));
     return packageJson.version;
   } catch {
