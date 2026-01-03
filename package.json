@@ -1,0 +1,40 @@
+{
+  "name": "git-lite-cli",
+  "version": "3.0.0",
+  "description": "",
+  "homepage": "https://github.com/NikhilKatkuri/git-lite-cli#readme",
+  "bugs": {
+    "url": "https://github.com/NikhilKatkuri/git-lite-cli/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NikhilKatkuri/git-lite-cli.git"
+  },
+  "license": "MIT",
+  "author": "Nikhil KATKURI",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@tsconfig/node24": "^24.0.3",
+    "@types/node": "^25.0.3",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "prettier": "^3.7.4",
+    "release-it": "^19.2.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.16"
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.11.0",
+    "commander": "^14.0.2",
+    "conf": "^15.0.2",
+    "execa": "^9.6.1",
+    "picocolors": "^1.1.1",
+    "undici": "^7.16.0"
+  }
+}
