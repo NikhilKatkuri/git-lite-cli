@@ -17,7 +17,15 @@ const program = new Command()
  * Authentication Command
  * auth, whoami
  */
-
+/**
+ * auth command
+ * options:
+ * --login, -l : Login to your account
+ * --logout, -o : Logout from your account
+ * --show-all, -s : Show all account details
+ * --verbose, -V : Output detailed authentication information
+ *  @see  @link -- should be added -- @see
+ */
 program
     .command('auth')
     .description('Authenticate to the git and github')
@@ -32,6 +40,12 @@ program
         console.log(`Chosen option: ${chosenOptions}`)
     })
 
+/**
+ * whoami command
+ * options:
+ * --json, -j : Output in JSON format
+ * @see  @link -- should be added -- @see
+ */
 program
     .command('whoami')
     .description('Display the current authenticated user')
@@ -44,7 +58,18 @@ program
  * Workflow commands
  * create, save, sync, branch, clone, ignore
  */
-
+/**
+ * create command
+ * * options:
+ * --name [name] : Name of the new repository
+ * --description [description] : Description of the repository
+ * --private : Create a private repository
+ * --gitignore [gitignore] : Add a .gitignore file
+ * --license [license] : Add a license file
+ * below link for more details on git init from the offical documentation of git
+ * @see {@link https://git-scm.com/docs/git-init} for more details
+ * @see @link -- should be added -- @see for {name, description,private,gitignore,license}
+ */
 program
     .command('create')
     .option('--name [name]', 'Name of the new repository')
@@ -129,7 +154,20 @@ program
  * below link for more details on git branch from the offical documentation of git
  * @see {@link https://git-scm.com/docs/git-branch} for more details
  */
-program.command('branch').action(() => {})
+program
+    .command('branch')
+    .option('-l, --list', 'List all branches')
+    .option('-d, --delete <branch-name>', 'Delete a specified branch')
+    .option(
+        '-r, --rename <new-name>',
+        'Rename the current branch to <new-name>'
+    )
+    .option(
+        '-c, --create <branch-name>',
+        'Create a new branch with the specified name'
+    )
+    .option('-s, --switch <branch-name>', 'Switch to the specified branch')
+    .action(() => {})
 
 /**
  * clone command
@@ -162,24 +200,123 @@ program
  * below link for more details on gitignore from the offical documentation of git
  * @see {@link https://git-scm.com/docs/gitignore} for more details
  */
-program.command('ignore').action(() => {})
+program
+    .command('ignore')
+    .command('ignore')
+    .option(
+        '-g, --global',
+        'Apply the ignore rules globally across all repositories for the current user'
+    )
+    .option(
+        '-s, --system',
+        'Apply the ignore rules system-wide for all users on the system'
+    )
+    .option(
+        '-l, --local',
+        'Apply the ignore rules to the current repository only'
+    )
+    .option(
+        '-t, --template <template-name>',
+        'Use a predefined template for common ignore patterns (e.g., Node, Python, Java)'
+    )
+    .action(() => {})
 
 /**
  * Rollback commands
  * undo, unstage, recover
  */
 
-program.command('undo').action(() => {})
+/**
+ * undo command Revert the most recent commit while keeping the changes staged.
+ * This allows you to make additional modifications before recommitting.
+ * below link for more details on git reset --soft from the offical documentation of git
+ * @see {@link https://git-scm.com/docs/git-reset#_soft} for more details
+ * options:
+ * --soft : Revert the last commit but keep changes staged
+ * --hard : Revert the last commit and discard all changes
+ * -ammend : Revert the last commit and prepare to amend it
+ */
+program
+    .command('undo')
+    .option('--soft', 'Revert the last commit but keep changes staged')
+    .option('--hard', 'Revert the last commit and discard all changes')
+    .option('--amend', 'Revert the last commit and prepare to amend it')
+    .action(() => {})
+/**
+ * unstage command Unstage files that have been staged for commit.
+ * This command moves files from the staging area back to the working directory,
+ * allowing you to modify them further before committing.
+ * below link for more details on git reset from the offical documentation of git
+ * @see {@link https://git-scm.com/docs/git-reset} for more details
+ * options:
+ * --all : Unstage all staged files
+ * --file <file> : Unstage a specific file
+ * --staged : Unstage only files that are currently staged
+ * --interactive, -i : Interactively select hunks of files to unstage
+ */
 program.command('unstage').action(() => {})
-program.command('recover').action(() => {})
+
+/**
+ * recover command Restore deleted or modified files to their last committed state.
+ * This command is useful for discarding unwanted changes and recovering lost work.
+ * below link for more details on git checkout -- <file> from the offical documentation of git
+ * @see {@link https://git-scm.com/docs/git-checkout#_} for more details
+ * options:
+ * --file <file> : Recover a specific file
+ * --all : Recover all files in the repository
+ * --interactive, -i : Interactively select files to recover
+ * --dry-run, -n : Show which files would be recovered without making any changes
+ */
+program
+    .command('recover')
+    .option('--file <file>', 'Recover a specific file')
+    .option('--all', 'Recover all files in the repository')
+    .option('-i, --interactive', 'Interactively select files to recover')
+    .option(
+        '-n, --dry-run',
+        'Show which files would be recovered without making any changes'
+    )
+    .action(() => {})
 
 /**
  * analysis and health commands
  * status, size, doctor
  */
-
+/**
+ * status command
+ * this command displays the current status of the repository,
+ * including staged, unstaged, and untracked files.
+ * It provides a summary of changes and helps users understand
+ * what actions need to be taken before committing.
+ * below link for more details on git status from the offical documentation of git
+ * @see {@link https://git-scm.com/docs/git-status} for more details
+ */
 program.command('status').action(() => {})
+/**
+ * size command
+ * this command analyzes the repository size,
+ * including the size of individual files and directories.
+ * It helps users identify large files that may need to be optimized or removed
+ * to reduce the overall repository size.
+ * --built by glc
+ */
 program.command('size').action(() => {})
+
+/**
+ * doctor command
+ * this command checks the health of the repository,
+ * identifying common issues and suggesting fixes.
+ * * diagnostics performed:
+ * - git binary files check
+ * - glc auth state
+ * - repository integrity
+ * - remote repository connectivity
+ * - common misconfigurations
+ * - hooks status
+ * - large files detection
+ * - unused branches
+ */
+
 program.command('doctor').action(() => {})
 
 program.parse(process.argv)
