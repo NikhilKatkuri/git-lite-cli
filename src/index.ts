@@ -1,3 +1,4 @@
+#! /usr/bin/env node
 import { enableCompileCache } from 'node:module'
 enableCompileCache()
 import { Command } from 'commander'
@@ -17,6 +18,7 @@ const program = new Command()
  * Authentication Command
  * auth, whoami
  */
+
 /**
  * auth command
  * options:
@@ -26,6 +28,7 @@ const program = new Command()
  * --verbose, -V : Output detailed authentication information
  *  @see  @link -- should be added -- @see
  */
+
 program
     .command('auth')
     .description('Authenticate to the git and github')
@@ -46,6 +49,7 @@ program
  * --json, -j : Output in JSON format
  * @see  @link -- should be added -- @see
  */
+
 program
     .command('whoami')
     .description('Display the current authenticated user')
@@ -58,6 +62,7 @@ program
  * Workflow commands
  * create, save, sync, branch, clone, ignore
  */
+
 /**
  * create command
  * * options:
@@ -70,6 +75,7 @@ program
  * @see {@link https://git-scm.com/docs/git-init} for more details
  * @see @link -- should be added -- @see for {name, description,private,gitignore,license}
  */
+
 program
     .command('create')
     .option('--name [name]', 'Name of the new repository')
@@ -154,6 +160,7 @@ program
  * below link for more details on git branch from the offical documentation of git
  * @see {@link https://git-scm.com/docs/git-branch} for more details
  */
+
 program
     .command('branch')
     .option('-l, --list', 'List all branches')
@@ -200,6 +207,7 @@ program
  * below link for more details on gitignore from the offical documentation of git
  * @see {@link https://git-scm.com/docs/gitignore} for more details
  */
+
 program
     .command('ignore')
     .command('ignore')
@@ -236,6 +244,7 @@ program
  * --hard : Revert the last commit and discard all changes
  * -ammend : Revert the last commit and prepare to amend it
  */
+
 program
     .command('undo')
     .option('--soft', 'Revert the last commit but keep changes staged')
@@ -254,6 +263,7 @@ program
  * --staged : Unstage only files that are currently staged
  * --interactive, -i : Interactively select hunks of files to unstage
  */
+
 program.command('unstage').action(() => {})
 
 /**
@@ -267,6 +277,7 @@ program.command('unstage').action(() => {})
  * --interactive, -i : Interactively select files to recover
  * --dry-run, -n : Show which files would be recovered without making any changes
  */
+
 program
     .command('recover')
     .option('--file <file>', 'Recover a specific file')
@@ -291,6 +302,7 @@ program
  * below link for more details on git status from the offical documentation of git
  * @see {@link https://git-scm.com/docs/git-status} for more details
  */
+
 program.command('status').action(() => {})
 /**
  * size command
@@ -300,6 +312,7 @@ program.command('status').action(() => {})
  * to reduce the overall repository size.
  * --built by glc
  */
+
 program.command('size').action(() => {})
 
 /**
