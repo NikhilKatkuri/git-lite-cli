@@ -1,32 +1,33 @@
 {
-  "$schema": "https://json.schemastore.org/tsconfig",
-  "extends": "@tsconfig/node24/tsconfig.json",
-  "compilerOptions": {
-    /* Project references and incremental builds for speed */
-    "incremental": true,
-    "composite": true,
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "extends": "@tsconfig/node24/tsconfig.json",
+    "compilerOptions": {
+        "types": ["node"],
+        /* Project references and incremental builds for speed */
+        "incremental": true,
+        "composite": true,
 
-    /* Modules - Use NodeNext for native ESM support */
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "target": "ES2023",
+        /* Modules - Use NodeNext for native ESM support */
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
+        "target": "ES2023",
 
-    /* Output structure */
-    "rootDir": "./src",
-    "outDir": "./dist",
-    "sourceMap": true,
+        /* Output structure */
+        "rootDir": "./src",
+        "outDir": "./dist",
+        "sourceMap": true,
 
-    /* Strictness and interop constraints */
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
-    "allowImportingTsExtensions": true,
-    "verbatimModuleSyntax": true,
-    "isolatedModules": true,
-    "noUncheckedIndexedAccess": true
-  },
-  "include": ["src/**/*.ts"],
-  "exclude": ["node_modules", "dist"]
+        /* Strictness and interop constraints */
+        "strict": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "resolveJsonModule": true,
+        // "allowImportingTsExtensions": true,
+        "verbatimModuleSyntax": true,
+        "isolatedModules": true,
+        "noUncheckedIndexedAccess": true
+    },
+    "include": ["src/**/*.ts"],
+    "exclude": ["node_modules", "dist"]
 }
