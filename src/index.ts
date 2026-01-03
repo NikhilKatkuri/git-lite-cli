@@ -3,6 +3,7 @@ import { enableCompileCache } from 'node:module'
 enableCompileCache()
 import { Command } from 'commander'
 import pkgJson from '../package.json' with { type: 'json' }
+import { AuthenticationManager } from './engines/auth.js'
 
 /**
  * Main Program Setup
@@ -37,10 +38,8 @@ program
     .option('--show-all, -s', 'Show all account details')
     .option('--verbose, -V', 'Output detailed authentication information')
     .action((options) => {
-        console.log('Authenticating to the service...')
-        const optionList = Object.keys(options)
-        const chosenOptions = optionList[0]
-        console.log(`Chosen option: ${chosenOptions}`)
+        const authInstance = new AuthenticationManager()
+        authInstance.run(options)
     })
 
 /**
@@ -54,8 +53,9 @@ program
     .command('whoami')
     .description('Display the current authenticated user')
     .option('--json, -j', 'Output in JSON format')
-    .action(() => {
-        console.log('Fetching current user information...')
+    .action((options) => {
+        const authInstance = new AuthenticationManager()
+        authInstance.whoAmI(options.json ? 'json' : 'text')
     })
 
 /**
