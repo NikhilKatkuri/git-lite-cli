@@ -4,6 +4,7 @@ enableCompileCache()
 import { Command } from 'commander'
 import pkgJson from '../package.json' with { type: 'json' }
 import { AuthenticationManager } from './engines/auth.js'
+import glcSaveManager from './engines/save.js'
 
 /**
  * Main Program Setup
@@ -89,30 +90,43 @@ program
     })
 
 /**
- * Save command with options
- * * defualt behavior is git add .
- * * Options  | orignally from git add and git commit
- * -a, --all  | git add -A && git commit -a && git commit --amend && git add --no-ignore-removal
- * -e, --exclude <files...> | git add --exclude=<files...>
- * -m, --message <message>  | git commit -m <message>
- * * below link for more details on git add from the offical documentation of git
- * * @see {@link https://git-scm.com/docs/git-add} for more details
+ * Save command
+ *
+ * Default behavior:
+ * - Stages changes using `git add .`
+ * - Creates a commit if a message is provided
+ *
+ * Options:
+ * -a, --all
+ *   Stages all changes (new, modified, deleted files),
+ *   equivalent to `git add -A`.
+ *
+ * -e, --exclude <files...>
+ *   Excludes specific files or patterns from being staged.
+ *   (Handled internally by the tool, not a native git-add flag.)
+ *
+ * -m, --message <message>
+ *   Commit message, equivalent to `git commit -m <message>`.
+ *
+ * --verbose
+ *   Enables detailed output.
+ *
+ * below link for more details on git add from the offical documentation of git
+ * @see https://git-scm.com/docs/git-add
  */
 
 program
     .command('save')
-    .option(
-        '-a, --all,',
-        'Stage all changes before committing (ammend,all,no-ignore-removal)'
-    )
+    .option('-a, --all', 'Stages all changes (new, modified, deleted files),')
     .option(
         '-e, --exclude <files...>',
         'Files or patterns to exclude from the commit'
     )
     .option('-m, --message <message>', 'Commit message')
+    .option('--verbose, -V', 'Output detailed authentication information')
     .action((options) => {
-        console.log('Saving changes with the following options:')
-        console.log(options)
+        const saveInstance = new glcSaveManager()
+        saveInstance.run(options)
     })
 
 /**

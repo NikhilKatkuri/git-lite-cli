@@ -7,6 +7,8 @@ import type {
     tokenData,
     userBucket,
 } from '../types/auth.js'
+import verboseLog from './verbose.js'
+import handleError from './handleError.js'
 
 /**
  * Manages GitHub authentication
@@ -82,7 +84,7 @@ class AuthenticationManager {
             }
             await this.executeAction(action, isVerbose)
         } catch (error) {
-            this.handleError(error, options?.verbose === true)
+            handleError(error, options?.verbose === true)
         }
     }
 
@@ -166,7 +168,7 @@ class AuthenticationManager {
      * @returns void
      */
     private async login(isVerbose: boolean): Promise<void> {
-        this.verboseLog('Starting login process...', isVerbose)
+        verboseLog('Starting login process...', isVerbose)
         if (await this.isLoggedIn()) {
             const shouldUpdate = await confirm({
                 message:
@@ -193,19 +195,16 @@ class AuthenticationManager {
             if (typeof tokenInput != 'string') {
                 throw new Error('Invalid Input')
             }
-            this.verboseLog('GitHub PAT received from user.', isVerbose)
-            this.verboseLog('Verifying GitHub token...', isVerbose)
+            verboseLog('GitHub PAT received from user.', isVerbose)
+            verboseLog('Verifying GitHub token...', isVerbose)
             const token = tokenInput.trim()
             const userInfo = await this.verifyToken(token)
-            this.verboseLog('GitHub token verified successfully.', isVerbose)
-            this.verboseLog('Storing token data...', isVerbose)
+            verboseLog('GitHub token verified successfully.', isVerbose)
+            verboseLog('Storing token data...', isVerbose)
             this.setToken(token, userInfo)
             outro('Login successful! Your token has been stored securely.')
         } catch (error) {
-            this.verboseLog(
-                'An error occurred during the login process.',
-                isVerbose
-            )
+            verboseLog('An error occurred during the login process.', isVerbose)
             if (
                 error instanceof Error &&
                 error.message.includes('verification')
@@ -257,7 +256,7 @@ class AuthenticationManager {
      */
 
     private async logout(isVerbose: boolean): Promise<void> {
-        this.verboseLog('Starting logout process...', isVerbose)
+        verboseLog('Starting logout process...', isVerbose)
         if (!this.isLoggedIn()) {
             outro('You are not logged in.')
             return
@@ -271,7 +270,7 @@ class AuthenticationManager {
         }
 
         configStore.delete(this.tokenName)
-        this.verboseLog('Token data removed from storage.', isVerbose)
+        verboseLog('Token data removed from storage.', isVerbose)
         outro('You have been logged out successfully.')
     }
     /**
@@ -280,15 +279,12 @@ class AuthenticationManager {
      * @returns void
      */
     private async showAccounts(isVerbose: boolean): Promise<void> {
-        this.verboseLog('Retrieving stored authentication data...', isVerbose)
+        verboseLog('Retrieving stored authentication data...', isVerbose)
         const storedData = this.getStoredTokenData()
         if (!storedData) {
             return
         }
-        this.verboseLog(
-            'Authentication data retrieved successfully.',
-            isVerbose
-        )
+        verboseLog('Authentication data retrieved successfully.', isVerbose)
 
         this.displayStoredUserData(storedData)
         outro('End of authentication data.')
@@ -328,20 +324,6 @@ class AuthenticationManager {
     }
 
     /**
-     * Handles errors that occur during execution.
-     * @param error unkown
-     * @param isVerbose boolean
-     * @return void
-     */
-
-    private handleError(error: unknown, isVerbose: boolean): void {
-        if (isVerbose) {
-            console.error(`Execution error: `, error)
-        }
-        outro('An unexpected error occured. Please try again.')
-    }
-
-    /**
      * Verifies the provided GitHub token by fetching user information.
      * @param token string
      * @returns userBucket
@@ -366,17 +348,6 @@ class AuthenticationManager {
         }
     }
 
-    /**
-     * Logs a message if verbose mode is enabled.
-     * @param message string
-     * @param isVerbose  boolean
-     * @returns void
-     */
-    private verboseLog(message: string, isVerbose: boolean): void {
-        if (isVerbose) {
-            log.info(message)
-        }
-    }
     /**
      * Displays the currently logged-in user's information.
      * @param format json | text
