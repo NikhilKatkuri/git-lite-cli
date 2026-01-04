@@ -9,6 +9,7 @@ import glcCreateManager from './engines/create.js'
 import glcCloneManager from './engines/clone.js'
 import glcBranchManager from './engines/branch.js'
 import glcSyncManager from './engines/sync.js'
+import unStageManager from './engines/unStage.js'
 
 /**
  * Main Program Setup
@@ -303,7 +304,19 @@ program
  * --interactive, -i : Interactively select hunks of files to unstage
  */
 
-program.command('unstage').action(() => {})
+program
+    .command('unstage')
+    .option('--all', 'Unstage all staged files')
+    .option('--file <file>', 'Unstage a specific file')
+    .option('--staged', 'Unstage only files that are currently staged')
+    .option(
+        '-i, --interactive',
+        'Interactively select hunks of files to unstage'
+    )
+    .action((options) => {
+        const unstageInstance = new unStageManager()
+        unstageInstance.run(options)
+    })
 
 /**
  * recover command Restore deleted or modified files to their last committed state.
@@ -332,6 +345,7 @@ program
  * analysis and health commands
  * status, size, doctor
  */
+
 /**
  * status command
  * this command displays the current status of the repository,
@@ -343,6 +357,7 @@ program
  */
 
 program.command('status').action(() => {})
+
 /**
  * size command
  * this command analyzes the repository size,
