@@ -6,6 +6,7 @@ import pkgJson from '../package.json' with { type: 'json' }
 import { AuthenticationManager } from './engines/auth.js'
 import glcSaveManager from './engines/save.js'
 import glcCreateManager from './engines/create.js'
+import glcCloneManager from './engines/clone.js'
 
 /**
  * Main Program Setup
@@ -218,7 +219,12 @@ program
     .option('--depth <depth>')
     .option('--branch <branch>')
     .option('--single-branch')
-    .action(() => {})
+    .option('--no-skip', 'Skip prompts and use provided options directly')
+    .option('--verbose, -V', 'Output detailed authentication information')
+    .action((options) => {
+        const cloneInstance = new glcCloneManager()
+        cloneInstance.run(options)
+    })
 
 /**
  * ignore command
@@ -232,7 +238,6 @@ program
  */
 
 program
-    .command('ignore')
     .command('ignore')
     .option(
         '-g, --global',
