@@ -10,6 +10,7 @@ import glcCloneManager from './engines/clone.js'
 import glcBranchManager from './engines/branch.js'
 import glcSyncManager from './engines/sync.js'
 import unStageManager from './engines/unStage.js'
+import glcUndoManager from './engines/undo.js'
 
 /**
  * Main Program Setup
@@ -290,7 +291,10 @@ program
     .option('--soft', 'Revert the last commit but keep changes staged')
     .option('--hard', 'Revert the last commit and discard all changes')
     .option('--amend', 'Revert the last commit and prepare to amend it')
-    .action(() => {})
+    .action(async (options) => {
+        const undoInstance = new glcUndoManager()
+        await undoInstance.run(options)
+    })
 /**
  * unstage command Unstage files that have been staged for commit.
  * This command moves files from the staging area back to the working directory,
