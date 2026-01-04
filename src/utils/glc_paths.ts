@@ -1,4 +1,3 @@
-import Conf from 'conf'
 import os from 'os'
 import path from 'path'
 

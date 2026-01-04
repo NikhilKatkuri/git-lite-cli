@@ -1,22 +1,69 @@
 import { confirm, intro, log, outro, password, select } from '@clack/prompts'
-import {
-    ghValidate,
-    verifyGhToken,
-    type userBucket,
-} from '../utils/gh-valid.js'
+import { ghValidate, verifyGhToken } from '../utils/gh-valid.js'
 import configStore from '../store.js'
+import type {
+    options,
+    optionsRecord,
+    tokenData,
+    userBucket,
+} from '../types/auth.js'
 
-type options = 'showAll' | 'logout' | 'login'
-type optionsRecord = Partial<Record<options | 'verbose', boolean>>
-
-interface tokenData {
-    token: string
-    gh: Array<userBucket>
-    created_at: string
-}
+/**
+ * Manages GitHub authentication
+ *
+ * @class AuthenticationManager
+ *
+ * privated Methods:
+ * - determineAction
+ * - promptForAction
+ * - executeAction
+ * - login
+ * - isLoggedIn
+ * - logout
+ * - setToken
+ * - showAccounts
+ * - displayStoredUserData
+ * - getStoredTokenData
+ * - handleError
+ * - verifyToken
+ * - verboseLog
+ * public Methods:
+ * - run
+ * - whoAmI
+ *
+ * order of methods execution in run():
+ * - determineAction
+ * - promptForAction (if needed)
+ * - executeAction
+ * - login / logout / showAccounts (based on action)
+ *
+ * order of methods execution in login():
+ * - isLoggedIn
+ * - verifyToken
+ * - setToken
+ *
+ * order of methods execution in showAccounts():
+ * - getStoredTokenData
+ * - displayStoredUserData
+ *
+ * order of methods execution in whoAmI():
+ * - isLoggedIn
+ * - getStoredTokenData
+ *
+ * @example @usage
+ * const authManager = new AuthenticationManager();
+ * await authManager.run({ login: true, verbose: true });
+ */
 
 class AuthenticationManager {
+    // Name of the token in the config store
     private tokenName: string = 'github_token'
+
+    /**
+     * Runs the authentication manager with the specified options.
+     * @param options  optionsRecord object containing action flags and verbose flag
+     * @returns void
+     */
 
     public async run(options?: optionsRecord) {
         try {
@@ -39,6 +86,12 @@ class AuthenticationManager {
         }
     }
 
+    /**
+     * Determines the action to perform based on the provided options or prompts the user.
+     * @param options optionsRecord
+     * @returns option of options type
+     */
+
     private async determineAction(options?: optionsRecord): Promise<options> {
         if (!options || Object.keys(options).length === 0) {
             return await this.promptForAction()
@@ -55,6 +108,11 @@ class AuthenticationManager {
         }
         return action[0] as options
     }
+
+    /**
+     * Prompts the user to select an authentication action.
+     * @returns option of options type
+     */
 
     private async promptForAction(): Promise<options> {
         const action = await select({
@@ -76,7 +134,17 @@ class AuthenticationManager {
         return action
     }
 
-    private async executeAction(action: options, isVerbose: boolean = false) {
+    /**
+     * Executes the specified authentication action.
+     * @param action  options
+     * @param isVerbose boolean
+     * @returns void
+     */
+
+    private async executeAction(
+        action: options,
+        isVerbose: boolean = false
+    ): Promise<void> {
         switch (action) {
             case 'login':
                 await this.login(isVerbose)
@@ -92,7 +160,12 @@ class AuthenticationManager {
         }
     }
 
-    private async login(isVerbose: boolean) {
+    /**
+     * Handles the login process.
+     * @param isVerbose  boolean
+     * @returns void
+     */
+    private async login(isVerbose: boolean): Promise<void> {
         this.verboseLog('Starting login process...', isVerbose)
         if (await this.isLoggedIn()) {
             const shouldUpdate = await confirm({
@@ -152,9 +225,22 @@ class AuthenticationManager {
             }
         }
     }
+
+    /**
+     * Checks if the user is currently logged in.
+     * @returns boolean
+     */
+
     private isLoggedIn(): boolean {
         return !!configStore.get(this.tokenName)
     }
+
+    /**
+     * Stores the token and user data in the config store.
+     * @param token string
+     * @param data userBucket
+     * @returns void
+     */
 
     private setToken(token: string, data: userBucket): void {
         configStore.set(this.tokenName, {
@@ -164,7 +250,13 @@ class AuthenticationManager {
         })
     }
 
-    private async logout(isVerbose: boolean) {
+    /**
+     * handles logout process
+     * @param isVerbose boolean
+     * @returns void
+     */
+
+    private async logout(isVerbose: boolean): Promise<void> {
         this.verboseLog('Starting logout process...', isVerbose)
         if (!this.isLoggedIn()) {
             outro('You are not logged in.')
@@ -182,8 +274,12 @@ class AuthenticationManager {
         this.verboseLog('Token data removed from storage.', isVerbose)
         outro('You have been logged out successfully.')
     }
-
-    private async showAccounts(isVerbose: boolean) {
+    /**
+     * Displays all stored authentication accounts.
+     * @param isVerbose boolean
+     * @returns void
+     */
+    private async showAccounts(isVerbose: boolean): Promise<void> {
         this.verboseLog('Retrieving stored authentication data...', isVerbose)
         const storedData = this.getStoredTokenData()
         if (!storedData) {
@@ -198,6 +294,12 @@ class AuthenticationManager {
         outro('End of authentication data.')
     }
 
+    /**
+     * Displays the stored user data in a formatted manner.
+     * @param storedData tokenData
+     * @return void
+     */
+
     private displayStoredUserData(storedData: tokenData): void {
         log.message('Stored Authentication Data:')
         log.info(`Token Created At: ${storedData.created_at}`)
@@ -211,6 +313,11 @@ class AuthenticationManager {
         log.message('---------------------------')
     }
 
+    /**
+     * Retrieves the stored token data from the config store.
+     * @returns tokenData | null
+     */
+
     private getStoredTokenData(): tokenData | null {
         const storedData = configStore.get(this.tokenName) as tokenData | null
         if (!storedData) {
@@ -219,12 +326,27 @@ class AuthenticationManager {
         }
         return storedData
     }
+
+    /**
+     * Handles errors that occur during execution.
+     * @param error unkown
+     * @param isVerbose boolean
+     * @return void
+     */
+
     private handleError(error: unknown, isVerbose: boolean): void {
         if (isVerbose) {
             console.error(`Execution error: `, error)
         }
         outro('An unexpected error occured. Please try again.')
     }
+
+    /**
+     * Verifies the provided GitHub token by fetching user information.
+     * @param token string
+     * @returns userBucket
+     */
+
     private async verifyToken(token: string): Promise<userBucket> {
         try {
             const userInfo = await verifyGhToken(token)
@@ -244,11 +366,23 @@ class AuthenticationManager {
         }
     }
 
+    /**
+     * Logs a message if verbose mode is enabled.
+     * @param message string
+     * @param isVerbose  boolean
+     * @returns void
+     */
     private verboseLog(message: string, isVerbose: boolean): void {
         if (isVerbose) {
             log.info(message)
         }
     }
+    /**
+     * Displays the currently logged-in user's information.
+     * @param format json | text
+     * @returns void
+     */
+
     public async whoAmI(format: 'json' | 'text' = 'text'): Promise<void> {
         if (!this.isLoggedIn()) {
             console.log('You are not logged in.')

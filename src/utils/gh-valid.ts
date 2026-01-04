@@ -1,4 +1,5 @@
 import { request } from 'undici'
+import type { userBucket } from '../types/auth.js'
 
 const endPoints = {
     main: 'https://api.github.com/',
@@ -10,13 +11,6 @@ const endPoints = {
 const ghValidate = (value: string): boolean => {
     const ghRegex = /^ghp_[a-zA-Z0-9]{36}$/
     return ghRegex.test(value)
-}
-
-export interface userBucket {
-    login: string
-    email: string | null
-    name: string | null
-    user_view_type: string | null
 }
 
 const verifyGhToken = async (token: string): Promise<userBucket> => {
