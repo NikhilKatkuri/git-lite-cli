@@ -80,7 +80,10 @@ program
 program
     .command('create')
     .option('--name [name]', 'Name of the new repository')
-    .option('--description [description]', 'Description of the repository')
+    .option(
+        '--description [description]',
+        'Description of the repository, with max length of 100 characters'
+    )
     .option('--private', 'Create a private repository')
     .option('--gitignore [gitignore]', 'Add a .gitignore file')
     .option('--license [license]', 'Add a license file')

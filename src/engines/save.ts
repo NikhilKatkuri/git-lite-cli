@@ -5,8 +5,17 @@ import gate from '../tools/gate.js'
 import { execa } from 'execa'
 import handleError from '../tools/handleError.js'
 
+/**
+ * Class to manage saving changes to a git repository.
+ */
+
 class glcSaveManager {
-    constructor() {}
+    /**
+     * Run the save operation with the provided options.
+     * @param options - Save options including message, all flag, exclude list, and verbose flag.
+     * @returns Promise<void>
+     */
+
     public async run(options: SaveOptions) {
         intro('Starting save operation...')
         let toInit = false
@@ -25,6 +34,7 @@ class glcSaveManager {
         verboseLog('verbose mode is enabled.', isVerbose)
         verboseLog('Preparing to save changes...', isVerbose)
 
+        // Check git availability
         const gateRes = await gate(isVerbose)
         if (typeof gateRes !== 'boolean') {
             outro('Operation cancelled.')
@@ -45,14 +55,21 @@ class glcSaveManager {
             }
             toInit = agree
         }
+        // Initialize repository if needed
         await this.initRepo(toInit, isVerbose)
         verboseLog('Git repository is ready.', isVerbose)
-
+        // Prepare and execute save actions
         await this.prepareActions(args, isVerbose)
         verboseLog('Save operation completed.', isVerbose)
 
         outro('Changes have been saved to the git repository.')
     }
+
+    /**
+     * Prepare and execute the save actions.
+     * @param options SaveOptionMap
+     * @param isVerbose  boolean
+     */
 
     private async prepareActions(
         options: SaveOptionMap,
@@ -67,7 +84,14 @@ class glcSaveManager {
         await this.commit(options.message, isVerbose)
     }
 
-    private async initRepo(toInit: boolean, isVerbose: boolean) {
+    /**
+     * Initialize a new git repository if required.
+     * @param toInit  boolean
+     * @param isVerbose boolean
+     * @returns Promise<void>
+     */
+
+    private async initRepo(toInit: boolean, isVerbose: boolean): Promise<void> {
         if (!toInit) {
             return
         }
@@ -78,8 +102,14 @@ class glcSaveManager {
             handleError(error, isVerbose)
         }
     }
+    /**
+     * Stage files to the git repository.
+     * @param allFlag boolean
+     * @param isVerbose boolean
+     * @returns Promise<void>
+     */
 
-    private async all(allFlag: boolean, isVerbose: boolean) {
+    private async all(allFlag: boolean, isVerbose: boolean): Promise<void> {
         verboseLog(
             `Adding files to staging area with all flag set to ${allFlag}`,
             isVerbose
@@ -91,7 +121,17 @@ class glcSaveManager {
         }
     }
 
-    private async exclude(resetFiles: string[], isVerbose: boolean) {
+    /**
+     * Exclude specified files from the staging area.
+     * @param resetFiles string[]
+     * @param isVerbose boolean
+     * @returns Promise<void>
+     */
+
+    private async exclude(
+        resetFiles: string[],
+        isVerbose: boolean
+    ): Promise<void> {
         verboseLog(
             `Excluding files from staging area: ${resetFiles.join(', ')}`,
             isVerbose
@@ -104,7 +144,13 @@ class glcSaveManager {
         }
     }
 
-    private async commit(message: string, isVerbose: boolean) {
+    /**
+     * Commit staged changes to the git repository.
+     * @param message string
+     * @param isVerbose  boolean
+     * @returns Promise<void>
+     */
+    private async commit(message: string, isVerbose: boolean): Promise<void> {
         verboseLog(`Committing changes with message: "${message}"`, isVerbose)
         if (!message || message.trim() === '') {
             throw new Error('Commit message cannot be empty')
@@ -115,6 +161,11 @@ class glcSaveManager {
             handleError(error, isVerbose)
         }
     }
+
+    /**
+     * Prompt the user for a commit message.
+     * @returns Promise<string>
+     */
 
     private async getPromptedMessage(): Promise<string> {
         const prompt = await text({
@@ -136,4 +187,5 @@ class glcSaveManager {
         return prompt
     }
 }
+
 export default glcSaveManager
