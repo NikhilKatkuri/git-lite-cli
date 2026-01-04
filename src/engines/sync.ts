@@ -4,11 +4,36 @@ import type { synchOptions } from '../types/sync.js'
 import { log, intro, outro } from '@clack/prompts'
 import verboseLog from '../tools/verbose.js'
 
+/**
+ * Class to manage Git sync operations.
+ * Supports syncing branches with options to stash, pull, and push.
+ * Utilizes user prompts for interactive operations when needed.
+ * Handles errors gracefully and provides verbose logging.
+ *
+ * @class glcSyncManager
+ *
+ * @public run
+ *
+ * @method stash
+ * @method pull
+ * @method push
+ * @method popStash
+ *
+ */
+
 class glcSyncManager {
     private branch: string = ''
     private isUsedStash: boolean = false
     private verbose: boolean = false
-    public async run(options: synchOptions) {
+
+    /**
+     * Run the sync manager with the provided options.
+     *
+     * @param options syncOptions
+     * @returns Promise<void>
+     */
+
+    public async run(options: synchOptions): Promise<void> {
         intro('Git Sync Operation')
 
         const { verbose = false, ...args } = options
@@ -36,6 +61,7 @@ class glcSyncManager {
             log.info(`Using branch: ${this.branch}`)
             verboseLog(`Target branch: ${this.branch}`, this.verbose)
 
+            // Perform sync operations
             await this.stash(args.noStash)
             await this.pull(args.noPull)
             await this.push(args.noPush)
@@ -48,7 +74,14 @@ class glcSyncManager {
         }
     }
 
-    private async pull(noPull: boolean = false) {
+    /**
+     * Perform git pull operation.
+     *
+     * @param noPull boolean
+     * @returns Promise<void>
+     */
+
+    private async pull(noPull: boolean = false): Promise<void> {
         if (noPull) {
             verboseLog('Skipping pull operation.', this.verbose)
             return
@@ -64,7 +97,14 @@ class glcSyncManager {
         }
     }
 
-    private async push(noPush: boolean = false) {
+    /**
+     * Perform git push operation.
+     *
+     * @param noPush boolean
+     * @returns  Promise<void>
+     */
+
+    private async push(noPush: boolean = false): Promise<void> {
         if (noPush) {
             verboseLog('Skipping push operation.', this.verbose)
             return
@@ -80,7 +120,14 @@ class glcSyncManager {
         }
     }
 
-    private async stash(noStash: boolean = false) {
+    /**
+     * Stash uncommitted changes if any.
+     *
+     * @param noStash boolean
+     * @returns  Promise<void>
+     */
+
+    private async stash(noStash: boolean = false): Promise<void> {
         if (noStash) {
             verboseLog('Skipping stash operation.', this.verbose)
             return
@@ -113,7 +160,13 @@ class glcSyncManager {
         }
     }
 
-    private async popStash() {
+    /**
+     * Pop the stashed changes if any.
+     *
+     * @returns  Promise<void>
+     */
+
+    private async popStash(): Promise<void> {
         if (!this.isUsedStash) {
             verboseLog('No stash to pop.', this.verbose)
             return
