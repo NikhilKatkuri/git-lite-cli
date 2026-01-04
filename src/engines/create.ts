@@ -7,6 +7,23 @@ import handleError from '../tools/handleError.js'
 import { request } from 'undici'
 import { endPoints, verifyGhToken } from '../utils/gh-valid.js'
 
+/**
+ * Class to manage GitHub repository creation.
+ * Supports creating repositories with various options.
+ * Utilizes user prompts for interactive operations when needed.
+ * Handles errors gracefully and provides verbose logging.
+ *
+ * @class glcCreateManager
+ *
+ * @public run
+ *
+ * @method setState
+ * @method promptToUser
+ * @method confirmationToUser
+ * @method cloud
+ * @method getBodyData
+ */
+
 class glcCreateManager {
     // Name of the token in the config store
     private tokenName: string = 'github_token'
@@ -20,17 +37,14 @@ class glcCreateManager {
     }
     private skip = false
 
-    private loadToken(): boolean {
-        const tokenData = configStore.get(this.tokenName) as tokenData
-        if (!tokenData || !tokenData.token) {
-            outro('No authentication token found. Please authenticate first.')
-            return false
-        }
-        this.token = tokenData.token
-        return true
-    }
+    /**
+     * Run the create manager with the provided options.
+     *
+     * @param options createOptions
+     * @returns Promise<void>
+     */
 
-    public async run(options: createOptions) {
+    public async run(options: createOptions): Promise<void> {
         intro("Let's create a new GitHub repository!")
         if (!this.loadToken()) {
             return
@@ -47,6 +61,28 @@ class glcCreateManager {
             handleError(error, isVerbose)
         }
     }
+
+    /**
+     * Load the GitHub token from the config store.
+     *
+     * @returns  boolean
+     */
+
+    private loadToken(): boolean {
+        const tokenData = configStore.get(this.tokenName) as tokenData
+        if (!tokenData || !tokenData.token) {
+            outro('No authentication token found. Please authenticate first.')
+            return false
+        }
+        this.token = tokenData.token
+        return true
+    }
+
+    /**
+     * Set the state of the final options by prompting the user if necessary.
+     *
+     * @param skipFlow boolean
+     */
 
     private async setState(skipFlow: boolean) {
         if (!this.finalOptions.name) {
@@ -91,6 +127,16 @@ class glcCreateManager {
         }
     }
 
+    /**
+     * Prompt the user for input with validation.
+     *
+     * @param message string
+     * @param initialValue string
+     * @param allowEmpty boolean
+     *
+     * @returns Promise<string>
+     */
+
     private async promptToUser(
         message: string,
         initialValue: string,
@@ -114,7 +160,6 @@ class glcCreateManager {
             throw new Error('Operation cancelled by the user.')
         }
 
-        // Handle empty or undefined input
         if (input === undefined || input === null || input === '') {
             if (!allowEmpty) {
                 outro('No input provided.')
@@ -134,6 +179,13 @@ class glcCreateManager {
         return input
     }
 
+    /**
+     * Prompt the user for confirmation.
+     *
+     * @param message string
+     * @returns  Promise<boolean>
+     */
+
     private async confirmationToUser(message: string): Promise<boolean> {
         const action = await confirm({ message, initialValue: false })
         if (typeof action === 'symbol') {
@@ -145,7 +197,15 @@ class glcCreateManager {
         }
         return action
     }
-    private async cloud(isVerbose: boolean) {
+
+    /**
+     * Create the repository on GitHub using the API.
+     *
+     * @param isVerbose boolean
+     * @returns Promise<void>
+     */
+
+    private async cloud(isVerbose: boolean): Promise<void> {
         try {
             const isVerified = await verifyGhToken(this.token)
             if (!isVerified || !isVerified.login) {
@@ -179,6 +239,12 @@ class glcCreateManager {
             handleError(error, isVerbose)
         }
     }
+
+    /**
+     * Prepare the request body data for repository creation.
+     *
+     * @returns object
+     */
 
     private getBodyData() {
         const bodyData: any = {
