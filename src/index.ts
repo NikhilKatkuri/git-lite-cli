@@ -5,6 +5,7 @@ import { Command } from 'commander'
 import pkgJson from '../package.json' with { type: 'json' }
 import { AuthenticationManager } from './engines/auth.js'
 import glcSaveManager from './engines/save.js'
+import glcCreateManager from './engines/create.js'
 
 /**
  * Main Program Setup
@@ -87,10 +88,14 @@ program
     .option('--private', 'Create a private repository')
     .option('--gitignore [gitignore]', 'Add a .gitignore file')
     .option('--license [license]', 'Add a license file')
+    .option(
+        '--skip',
+        'Skip the private , gitignore and license prompts for user'
+    )
     .option('--verbose, -V', 'Output detailed authentication information')
-    .action((options) => {
-        console.log('Creating a new repository with the following options:')
-        console.log(options)
+    .action(async (options) => {
+        const createInstance = new glcCreateManager()
+        await createInstance.run(options)
     })
 
 /**

@@ -6,6 +6,9 @@ const endPoints = {
     getUser() {
         return this.main + 'user'
     },
+    getRepoCreate() {
+        return this.main + 'user/repos'
+    },
 }
 
 const ghValidate = (value: string): boolean => {
@@ -46,4 +49,4 @@ const verifyGhToken = async (token: string): Promise<userBucket> => {
     return bucket
 }
 
-export { ghValidate, verifyGhToken }
+export { ghValidate, verifyGhToken, endPoints }
