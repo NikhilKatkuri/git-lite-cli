@@ -8,6 +8,7 @@ import glcSaveManager from './engines/save.js'
 import glcCreateManager from './engines/create.js'
 import glcCloneManager from './engines/clone.js'
 import glcBranchManager from './engines/branch.js'
+import glcSyncManager from './engines/sync.js'
 
 /**
  * Main Program Setup
@@ -135,9 +136,9 @@ program
     )
     .option('-m, --message <message>', 'Commit message')
     .option('--verbose, -V', 'Output detailed authentication information')
-    .action((options) => {
+    .action(async (options) => {
         const saveInstance = new glcSaveManager()
-        saveInstance.run(options)
+        await saveInstance.run(options)
     })
 
 /**
@@ -172,8 +173,13 @@ program
     .option('--no-pull', 'Skip pulling changes from the remote repository')
     .option('--no-push', 'Skip pushing changes to the remote repository')
     .option('--no-stash', 'Skip stashing local changes')
+    .option('--verbose, -V', 'Output detailed authentication information')
     .description('Specify the branch to save changes to')
-    .action(() => {})
+    .action(async (options) => {
+        const syncInstance = new glcSyncManager()
+        await syncInstance.run(options)
+    })
+
 /**
  * branch command
  * * options:
