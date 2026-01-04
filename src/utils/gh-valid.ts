@@ -1,6 +1,7 @@
 import { request } from 'undici'
 import type { userBucket } from '../types/auth.js'
 
+// GitHub API endpoints
 const endPoints = {
     main: 'https://api.github.com/',
     getUser() {
@@ -11,10 +12,24 @@ const endPoints = {
     },
 }
 
+/**
+ * Validate GitHub personal access token format.
+ *
+ * @param value string
+ * @returns boolean
+ */
+
 const ghValidate = (value: string): boolean => {
     const ghRegex = /^ghp_[a-zA-Z0-9]{36}$/
     return ghRegex.test(value)
 }
+
+/**
+ * Verify GitHub personal access token by fetching user data.
+ *
+ * @param token string
+ * @returns Promise<userBucket>
+ */
 
 const verifyGhToken = async (token: string): Promise<userBucket> => {
     let bucket: userBucket = {

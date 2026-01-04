@@ -6,6 +6,7 @@ import { log } from '@clack/prompts'
  * @param isVerbose  boolean
  * @returns void
  */
+
 function verboseLog(message: string, isVerbose: boolean): void {
     if (isVerbose) {
         log.info(message)
