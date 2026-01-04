@@ -29,7 +29,7 @@ class glcSaveManager {
         verboseLog('verbose mode is enabled.', isVerbose)
         verboseLog('Preparing to save changes...', isVerbose)
 
-        const gateRes = await gate()
+        const gateRes = await gate(isVerbose)
         if (typeof gateRes !== 'boolean') {
             outro('Operation cancelled.')
             return
