@@ -9,8 +9,37 @@ import handleError from '../tools/handleError.js'
 import { execa } from 'execa'
 import verboseLog from '../tools/verbose.js'
 
+/**
+ * Class to manage Git branch operations.
+ * Supports creating, renaming, switching, deleting, and listing branches.
+ * Utilizes user prompts for interactive operations when needed.
+ * Handles errors gracefully and provides verbose logging.
+ * 
+ * @class glcBranchManager
+ * @public run
+ * 
+ * @method determineAction
+ * @method handleAction
+ * @method list
+ * @method create
+ * @method rename
+ * @method delete
+ * @method switch
+ * @method promptToUserForAction
+ * @method getBranchNameFromUser
+ * @method confirmationToUser
+
+ */
+
 class glcBranchManager {
     private verbose: boolean = false
+
+    /**
+     * Run the branch manager with the provided options.
+     *
+     * @param options branchOption
+     * @returns  Promise<void>
+     */
 
     public async run(options: branchOption): Promise<void> {
         intro('Git Branch Management')
@@ -37,29 +66,44 @@ class glcBranchManager {
         }
     }
 
+    /**
+     * Determine the branch action to perform based on provided options or user input.
+     *
+     * @param options branchMap
+     * @returns Promise<branch | void>
+     */
+
     private async determineAction(options: branchMap): Promise<branch | void> {
         if (!options || Object.keys(options).length === 0) {
             verboseLog(
                 'No branch options provided, prompting user for action...',
                 this.verbose
             )
+
+            // Prompt user for action
             const actionInput = await this.promptToUserForAction()
             if (actionInput === 'list') {
                 await this.list()
                 return
             }
+
+            // Prompt, get branch name
             const branchName = await this.getBranchNameFromUser(
                 `Enter the branch name to ${actionInput}:`
             )
+
             return {
                 name: actionInput,
                 value: branchName,
             } as branch
         }
+
         verboseLog(
             'Branch options provided, determining action...',
             this.verbose
         )
+
+        //  Filter out undefined options
         const optionList = Object.entries(options).filter(
             ([_, value]) => value !== undefined
         )
@@ -68,15 +112,20 @@ class glcBranchManager {
             log.warn(
                 'Multiple actions provided. Please provide only one action at a time. First action will be considered.'
             )
+            // Confirm with user to proceed with first action
             const shouldProceed = await this.confirmationToUser(
                 'Do you want to proceed with the first action?'
             )
+            // If user declines, exit
             if (!shouldProceed) {
                 outro('Operation cancelled by the user.')
                 return
             }
         }
 
+        /**
+         * Extract action and value from the first option
+         */
         const action = optionList.map(([key, _]) => key)[0]
         const value = optionList.map(([_, value]) => value)[0]
 
@@ -86,7 +135,16 @@ class glcBranchManager {
         } as branch
     }
 
+    /**
+     * Handle the specified branch action.
+     *
+     * @param action branch
+     * @returns Promise<void>
+     *
+     */
+
     private async handleAction(action: branch): Promise<void> {
+        // Execute the appropriate method based on action name
         switch (action.name) {
             case 'create':
                 await this.create(action.value)
@@ -105,7 +163,13 @@ class glcBranchManager {
         }
     }
 
-    private async list() {
+    /**
+     * List all branches in the repository.
+     *
+     * @returns Promise<void>
+     */
+
+    private async list(): Promise<void> {
         try {
             verboseLog('Executing git branch command...', this.verbose)
             const { stdout } = await execa('git', ['branch', '-a'])
@@ -116,7 +180,14 @@ class glcBranchManager {
         }
     }
 
-    private async create(branchName: string) {
+    /**
+     * Create a new branch with the specified name.
+     *
+     * @param branchName string
+     * @returns Promise<void>
+     */
+
+    private async create(branchName: string): Promise<void> {
         try {
             verboseLog(`Creating branch ${branchName} ....`, this.verbose)
             await execa('git', ['branch', branchName])
@@ -126,7 +197,14 @@ class glcBranchManager {
         }
     }
 
-    private async rename(branchName: string) {
+    /**
+     * Rename the current branch to the specified name.
+     *
+     * @param branchName string
+     * @returns Promise<void>
+     */
+
+    private async rename(branchName: string): Promise<void> {
         try {
             verboseLog(
                 `Renaming current branch to ${branchName} ....`,
@@ -139,7 +217,13 @@ class glcBranchManager {
         }
     }
 
-    private async delete(branchName: string) {
+    /**
+     * Delete the specified branch.
+     *
+     * @param branchName string
+     * @returns Promise<void>
+     */
+    private async delete(branchName: string): Promise<void> {
         try {
             verboseLog(`Deleting branch ${branchName} ....`, this.verbose)
             await execa('git', ['branch', '-d', branchName])
@@ -149,7 +233,14 @@ class glcBranchManager {
         }
     }
 
-    private async switch(branchName: string) {
+    /**
+     * Switch to the specified branch.
+     *
+     * @param branchName string
+     * @returns Promise<void>
+     */
+
+    private async switch(branchName: string): Promise<void> {
         try {
             verboseLog(`Switching to branch ${branchName} ....`, this.verbose)
             await execa('git', ['checkout', branchName])
@@ -158,6 +249,12 @@ class glcBranchManager {
             handleError(error, this.verbose)
         }
     }
+
+    /**
+     * Prompt the user to select a branch action.
+     *
+     * @returns Promise<branchtype>
+     */
 
     private async promptToUserForAction(): Promise<branchtype> {
         const input = await select({
@@ -180,6 +277,13 @@ class glcBranchManager {
         return input as branchtype
     }
 
+    /**
+     * Get branch name from user with a prompt.
+     *
+     *  @param message string
+     * @returns Promise<string>
+     */
+
     private async getBranchNameFromUser(message: string): Promise<string> {
         const input = await text({
             message,
@@ -198,6 +302,13 @@ class glcBranchManager {
         }
         return input
     }
+
+    /**
+     * Prompt the user for confirmation.
+     *
+     * @param message string
+     * @returns Promise<boolean>
+     */
 
     private async confirmationToUser(message: string): Promise<boolean> {
         const action = await confirm({ message, initialValue: false })
