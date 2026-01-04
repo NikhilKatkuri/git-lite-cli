@@ -7,6 +7,7 @@ import { AuthenticationManager } from './engines/auth.js'
 import glcSaveManager from './engines/save.js'
 import glcCreateManager from './engines/create.js'
 import glcCloneManager from './engines/clone.js'
+import glcBranchManager from './engines/branch.js'
 
 /**
  * Main Program Setup
@@ -198,7 +199,12 @@ program
         'Create a new branch with the specified name'
     )
     .option('-s, --switch <branch-name>', 'Switch to the specified branch')
-    .action(() => {})
+    .option('--verbose, -V', 'Output detailed authentication information')
+    .action((options) => {
+        console.log('Branch command invoked with options:', options)
+        const branchInstance = new glcBranchManager()
+        branchInstance.run(options)
+    })
 
 /**
  * clone command
