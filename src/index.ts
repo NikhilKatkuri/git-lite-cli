@@ -200,10 +200,9 @@ program
     )
     .option('-s, --switch <branch-name>', 'Switch to the specified branch')
     .option('--verbose, -V', 'Output detailed authentication information')
-    .action((options) => {
-        console.log('Branch command invoked with options:', options)
+    .action(async (options) => {
         const branchInstance = new glcBranchManager()
-        branchInstance.run(options)
+        await branchInstance.run(options)
     })
 
 /**
@@ -227,9 +226,9 @@ program
     .option('--single-branch')
     .option('--no-skip', 'Skip prompts and use provided options directly')
     .option('--verbose, -V', 'Output detailed authentication information')
-    .action((options) => {
+    .action(async (options) => {
         const cloneInstance = new glcCloneManager()
-        cloneInstance.run(options)
+        await cloneInstance.run(options)
     })
 
 /**

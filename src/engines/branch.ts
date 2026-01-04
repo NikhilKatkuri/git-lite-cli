@@ -38,12 +38,16 @@ class glcBranchManager {
     }
 
     private async determineAction(options: branchMap): Promise<branch | void> {
-        if (!options) {
+        if (!options || Object.keys(options).length === 0) {
             verboseLog(
                 'No branch options provided, prompting user for action...',
                 this.verbose
             )
             const actionInput = await this.promptToUserForAction()
+            if (actionInput === 'list') {
+                await this.list()
+                return
+            }
             const branchName = await this.getBranchNameFromUser(
                 `Enter the branch name to ${actionInput}:`
             )
@@ -159,6 +163,7 @@ class glcBranchManager {
         const input = await select({
             message: 'Select an option:',
             options: [
+                { value: 'list', label: 'List Branches' },
                 { value: 'create', label: 'Create Branch' },
                 { value: 'rename', label: 'Rename Branch' },
                 { value: 'switch', label: 'Switch Branch' },
