@@ -1,13 +1,9 @@
 import { confirm, intro, log, outro, text } from '@clack/prompts'
-import type {
-    SaveOptionKey,
-    SaveOptionMap,
-    SaveOptions,
-} from '../types/save.js'
-import verboseLog from './verbose.js'
-import gate from './gate.js'
+import type { SaveOptionMap, SaveOptions } from '../types/save.js'
+import verboseLog from '../tools/verbose.js'
+import gate from '../tools/gate.js'
 import { execa } from 'execa'
-import handleError from './handleError.js'
+import handleError from '../tools/handleError.js'
 
 class glcSaveManager {
     constructor() {}

@@ -84,6 +84,7 @@ program
     .option('--private', 'Create a private repository')
     .option('--gitignore [gitignore]', 'Add a .gitignore file')
     .option('--license [license]', 'Add a license file')
+    .option('--verbose, -V', 'Output detailed authentication information')
     .action((options) => {
         console.log('Creating a new repository with the following options:')
         console.log(options)

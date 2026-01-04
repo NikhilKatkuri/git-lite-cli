@@ -7,8 +7,8 @@ import type {
     tokenData,
     userBucket,
 } from '../types/auth.js'
-import verboseLog from './verbose.js'
-import handleError from './handleError.js'
+import verboseLog from '../tools/verbose.js'
+import handleError from '../tools/handleError.js'
 
 /**
  * Manages GitHub authentication
