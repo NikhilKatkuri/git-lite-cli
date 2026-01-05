@@ -11,6 +11,8 @@ import glcBranchManager from './engines/branch.js'
 import glcSyncManager from './engines/sync.js'
 import unStageManager from './engines/unStage.js'
 import glcUndoManager from './engines/undo.js'
+import glcIgnoreManager from './engines/ignore.js'
+import glcRecoverManager from './engines/recover.js'
 
 /**
  * Main Program Setup
@@ -240,35 +242,18 @@ program
     })
 
 /**
- * ignore command
- * * options:
- * --global, -g : Apply the ignore rules globally across all repositories for the current user
- * --system, -s : Apply the ignore rules system-wide for all users on the system
- * --local, -l : Apply the ignore rules to the current repository only
- * --template <template-name> : Use a predefined template for common ignore patterns (e.g., Node, Python, Java)
+ * ignore command [gitignore management]
  * below link for more details on gitignore from the offical documentation of git
  * @see {@link https://git-scm.com/docs/gitignore} for more details
  */
 
 program
-    .command('ignore')
-    .option(
-        '-g, --global',
-        'Apply the ignore rules globally across all repositories for the current user'
-    )
-    .option(
-        '-s, --system',
-        'Apply the ignore rules system-wide for all users on the system'
-    )
-    .option(
-        '-l, --local',
-        'Apply the ignore rules to the current repository only'
-    )
-    .option(
-        '-t, --template <template-name>',
-        'Use a predefined template for common ignore patterns (e.g., Node, Python, Java)'
-    )
-    .action(() => {})
+    .command('ignore [template]')
+    .option('--verbose, -V', 'Output detailed authentication information')
+    .action((template, options) => {
+        const ignoreInstance = new glcIgnoreManager()
+        ignoreInstance.run({ template, ...options })
+    })
 
 /**
  * Rollback commands
@@ -291,6 +276,7 @@ program
     .option('--soft', 'Revert the last commit but keep changes staged')
     .option('--hard', 'Revert the last commit and discard all changes')
     .option('--amend', 'Revert the last commit and prepare to amend it')
+    .option('--verbose, -V', 'Output detailed authentication information')
     .action(async (options) => {
         const undoInstance = new glcUndoManager()
         await undoInstance.run(options)
@@ -317,6 +303,7 @@ program
         '-i, --interactive',
         'Interactively select hunks of files to unstage'
     )
+    .option('--verbose, -V', 'Output detailed authentication information')
     .action((options) => {
         const unstageInstance = new unStageManager()
         unstageInstance.run(options)
@@ -328,22 +315,20 @@ program
  * below link for more details on git checkout -- <file> from the offical documentation of git
  * @see {@link https://git-scm.com/docs/git-checkout#_} for more details
  * options:
- * --file <file> : Recover a specific file
- * --all : Recover all files in the repository
  * --interactive, -i : Interactively select files to recover
+ * --all : Recover all files in the repository
  * --dry-run, -n : Show which files would be recovered without making any changes
  */
 
 program
-    .command('recover')
-    .option('--file <file>', 'Recover a specific file')
-    .option('--all', 'Recover all files in the repository')
+    .command('recover [files...]')
     .option('-i, --interactive', 'Interactively select files to recover')
-    .option(
-        '-n, --dry-run',
-        'Show which files would be recovered without making any changes'
-    )
-    .action(() => {})
+    .option('--all', 'Recover all ignored files (requires confirmation)')
+    .option('-n, --dry-run', 'Preview files that would be recovered')
+    .action((files, options) => {
+        const recoverInstance = new glcRecoverManager()
+        recoverInstance.run({ files, ...options })
+    })
 
 /**
  * analysis and health commands
