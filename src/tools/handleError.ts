@@ -11,5 +11,5 @@ export default function handleError(error: unknown, isVerbose: boolean): void {
     if (isVerbose) {
         console.error(`Execution error: `, error)
     }
-    outro('An unexpected error occured. Please try again.')
+    outro('An unexpected error occurred. Please try again.')
 }

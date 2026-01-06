@@ -46,9 +46,9 @@ program
     .option('--logout, -o', 'Logout from your account')
     .option('--show-all, -s', 'Show all account details')
     .option('--verbose, -V', 'Output detailed authentication information')
-    .action((options) => {
+    .action(async (options) => {
         const authInstance = new AuthenticationManager()
-        authInstance.run(options)
+        await authInstance.run(options)
     })
 
 /**
@@ -250,9 +250,9 @@ program
 program
     .command('ignore [template]')
     .option('--verbose, -V', 'Output detailed authentication information')
-    .action((template, options) => {
+    .action(async (template, options) => {
         const ignoreInstance = new glcIgnoreManager()
-        ignoreInstance.run({ template, ...options })
+        await ignoreInstance.run({ template, ...options })
     })
 
 /**
@@ -304,9 +304,9 @@ program
         'Interactively select hunks of files to unstage'
     )
     .option('--verbose, -V', 'Output detailed authentication information')
-    .action((options) => {
+    .action(async (options) => {
         const unstageInstance = new unStageManager()
-        unstageInstance.run(options)
+        await unstageInstance.run(options)
     })
 
 /**
@@ -325,9 +325,9 @@ program
     .option('-i, --interactive', 'Interactively select files to recover')
     .option('--all', 'Recover all ignored files (requires confirmation)')
     .option('-n, --dry-run', 'Preview files that would be recovered')
-    .action((files, options) => {
+    .action(async (files, options) => {
         const recoverInstance = new glcRecoverManager()
-        recoverInstance.run({ files, ...options })
+        await recoverInstance.run({ files, ...options })
     })
 
 /**

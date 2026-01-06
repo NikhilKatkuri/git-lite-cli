@@ -92,6 +92,9 @@ class glcRecoverManager {
 
             const recoveryBranch = `recovery-${selectedHash}`
             await execa('git', ['checkout', '-b', recoveryBranch, selectedHash])
+            log.success(
+                `Successfully created and switched to recovery branch: ${recoveryBranch}`
+            )
         } catch (error) {
             handleError(error, false)
         }
@@ -100,7 +103,7 @@ class glcRecoverManager {
     private async recoverAll() {
         try {
             await execa('git', ['reset', '--hard', 'HEAD@{1}'])
-            console.log('Successfully recovered to previous state.')
+            log.success('Successfully recovered to previous state.')
         } catch (error) {
             handleError(error, true)
         }
@@ -108,7 +111,7 @@ class glcRecoverManager {
     private async recoverFiles(files: string[]) {
         try {
             await execa('git', ['checkout', 'HEAD', '--', ...files])
-            console.log(`Recovered files: ${files.join(', ')}`)
+            log.success(`Recovered files: ${files.join(', ')}`)
         } catch (error) {
             handleError(error, true)
         }
