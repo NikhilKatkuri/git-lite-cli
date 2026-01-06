@@ -1,70 +1,144 @@
 import type { ignoreOptions } from '../types/ignore.js'
-import { writeFileSync, existsSync } from 'fs'
-import { log } from '@clack/prompts'
+import { writeFileSync, existsSync, readFileSync } from 'fs'
+import { log, select } from '@clack/prompts'
 import handleError from '../tools/handleError.js'
 import path from 'path'
+import { request } from 'undici'
+import verboseLog from '../tools/verbose.js'
 
 class glcIgnoreManager {
     private verbose: boolean = false
+    private TEMPLATES = {
+        'Node.js': 'Node',
+        React: 'Node',
+        'Next.js': 'Node',
+        'Vue.js': 'Node',
+        Angular: 'Node',
+        TypeScript: 'Node',
+        Python: 'Python',
+        Java: 'Java',
+        Go: 'Go',
+        Rust: 'Rust',
+        'C++': 'C++',
+        'C#': 'VisualStudio',
+        Swift: 'Swift',
+        Kotlin: 'Kotlin',
+        Ruby: 'Ruby',
+        PHP: 'PHP',
+        Dart: 'Dart',
+        Flutter: 'Dart',
+        Unity: 'Unity',
+        Android: 'Android',
+        iOS: 'Swift',
+        WordPress: 'WordPress',
+        Laravel: 'Laravel',
+        Django: 'Python',
+        Rails: 'Rails',
+    }
 
     public async run(options: ignoreOptions) {
         this.verbose = options.verbose ?? false
 
-        const template = options.template ?? this.getTemplateName()
-        await this.applyTemplate(template)
-    }
-
-    private getTemplateName(): string {
-        // Default to Node.js template if no template specified
-        return 'node'
-    }
-
-    private async applyTemplate(templateName: string) {
         try {
-            const gitignoreContent = this.getTemplateContent(templateName)
-            const gitignorePath = path.join(process.cwd(), '.gitignore')
+            const template = options.template ?? (await this.getTemplateName())
+            let templateContent = await this.fetchTemplate(template)
 
-            if (existsSync(gitignorePath)) {
-                log.warn(
-                    '.gitignore file already exists. Backing up the existing file...'
-                )
-                const backupPath = `${gitignorePath}.backup.${Date.now()}`
-                const existingContent = require('fs').readFileSync(
-                    gitignorePath,
-                    'utf-8'
-                )
-                writeFileSync(backupPath, existingContent)
-                log.info(`Backup created: ${backupPath}`)
+            // Fallback to local template if GitHub fetch failed
+            if (!templateContent) {
+                templateContent = this.getTemplateContent(template)
+                verboseLog(`Using local template for ${template}`, this.verbose)
             }
 
-            writeFileSync(gitignorePath, gitignoreContent)
-
-            if (this.verbose) {
-                log.success(
-                    `Generated .gitignore file with ${templateName} template`
-                )
-            }
+            await this.applyTemplate(template, templateContent)
         } catch (error) {
             handleError(error, this.verbose)
         }
     }
 
+    private async getTemplateName(): Promise<string> {
+        const template = await select({
+            message: 'Choose one Template according to projects:',
+            options: Object.keys(this.TEMPLATES).map((key) => ({
+                value: key,
+                label: key,
+            })),
+        })
+        if (
+            !template ||
+            typeof template != 'string' ||
+            typeof template === 'symbol'
+        ) {
+            throw new Error('No template selected.')
+        }
+
+        return template
+    }
+
+    private async fetchTemplate(name: string): Promise<string | null> {
+        const githubTemplateName =
+            this.TEMPLATES[name as keyof typeof this.TEMPLATES] || name
+        const url = `https://raw.githubusercontent.com/github/gitignore/main/${githubTemplateName}.gitignore`
+
+        try {
+            verboseLog(`Fetching template from: ${url}`, this.verbose)
+            const response = await request(url, {
+                headers: {
+                    'User-Agent': 'GLC-NodeJS-Undici-Client',
+                },
+            })
+
+            if (response.statusCode === 200) {
+                const templateContent = await response.body.text()
+                if (this.verbose) {
+                    log.success(
+                        `Successfully fetched ${name} template from GitHub`
+                    )
+                }
+                return templateContent
+            } else {
+                verboseLog(
+                    `Template not found on GitHub (${response.statusCode}), using local template`,
+                    this.verbose
+                )
+                return null
+            }
+        } catch (error) {
+            handleError(error, this.verbose)
+            return null
+        }
+    }
+
     private getTemplateContent(templateName: string): string {
         const templates = {
+            'Node.js': this.getNodeTemplate(),
+            React: this.getNodeTemplate(),
+            'Next.js': this.getNodeTemplate(),
+            'Vue.js': this.getNodeTemplate(),
+            Angular: this.getNodeTemplate(),
+            TypeScript: this.getTypescriptTemplate(),
+            Python: this.getPythonTemplate(),
+            Java: this.getJavaTemplate(),
+            Go: this.getGoTemplate(),
+            Rust: this.getRustTemplate(),
+            'C++': this.getCppTemplate(),
+            'C#': this.getCSharpTemplate(),
+            Swift: this.getSwiftTemplate(),
+            Ruby: this.getRubyTemplate(),
+            PHP: this.getPhpTemplate(),
+            Dart: this.getDartTemplate(),
+            Flutter: this.getDartTemplate(),
             node: this.getNodeTemplate(),
             python: this.getPythonTemplate(),
             typescript: this.getTypescriptTemplate(),
             generic: this.getGenericTemplate(),
         }
 
-        return (
-            templates[templateName as keyof typeof templates] ||
-            templates.generic
-        )
+        const template = templates[templateName as keyof typeof templates]
+        return template || this.getGenericTemplate()
     }
 
     private getNodeTemplate(): string {
-        return `# Node.js dependencies
+        return `# Dependencies
 node_modules/
 
 # Logs
@@ -140,10 +214,6 @@ wheels/
 # PyInstaller
 *.manifest
 *.spec
-
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
 
 # Unit test / coverage reports
 htmlcov/
@@ -225,6 +295,209 @@ jspm_packages/
 Thumbs.db`
     }
 
+    private getJavaTemplate(): string {
+        return `# Java
+*.class
+*.log
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Package Files
+target/
+build/
+
+# IDE
+.idea/
+*.iws
+*.iml
+*.ipr
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db`
+    }
+
+    private getGoTemplate(): string {
+        return `# Go
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+go.work
+
+# Dependency directories
+vendor/
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db`
+    }
+
+    private getRustTemplate(): string {
+        return `# Rust
+/target/
+**/*.rs.bk
+Cargo.lock
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db`
+    }
+
+    private getCppTemplate(): string {
+        return `# C++
+*.o
+*.obj
+*.exe
+*.dll
+*.so
+*.dylib
+*.a
+*.lib
+
+# Build directories
+build/
+debug/
+release/
+
+# IDE
+.vs/
+.vscode/
+*.vcxproj.user
+
+# OS
+.DS_Store
+Thumbs.db`
+    }
+
+    private getCSharpTemplate(): string {
+        return `# C#
+bin/
+obj/
+*.exe
+*.dll
+*.pdb
+*.cache
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# IDE
+.vs/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db`
+    }
+
+    private getSwiftTemplate(): string {
+        return `# Swift
+.DS_Store
+build/
+DerivedData/
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata/
+*.moved-aside
+*.xccheckout
+*.xcscmblueprint
+
+# IDE
+.vscode/
+
+# OS
+Thumbs.db`
+    }
+
+    private getRubyTemplate(): string {
+        return `# Ruby
+*.gem
+*.rbc
+/.config
+/coverage/
+/InstalledFiles
+/pkg/
+/spec/reports/
+/spec/examples.txt
+/test/tmp/
+/test/version_tmp/
+/tmp/
+
+# Bundler
+vendor/bundle/
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db`
+    }
+
+    private getPhpTemplate(): string {
+        return `# PHP
+/vendor/
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Laravel specific
+/bootstrap/compiled.php
+/app/storage/
+.env
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db`
+    }
+
+    private getDartTemplate(): string {
+        return `# Dart/Flutter
+.dart_tool/
+.packages
+build/
+.pub-cache/
+.pub/
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db`
+    }
+
     private getGenericTemplate(): string {
         return `# Dependencies
 node_modules/
@@ -247,5 +520,41 @@ build/
 .DS_Store
 Thumbs.db`
     }
+    private async applyTemplate(
+        templateName: string,
+        templateContent?: string
+    ) {
+        try {
+            const gitignoreContent = templateContent
+            const gitignorePath = path.join(process.cwd(), '.gitignore')
+
+            if (existsSync(gitignorePath)) {
+                log.warn(
+                    '.gitignore file already exists. Backing up the existing file...'
+                )
+                const backupPath = `${gitignorePath}.backup.${Date.now()}`
+                const existingContent = readFileSync(gitignorePath, 'utf-8')
+                writeFileSync(backupPath, existingContent)
+                log.info(`Backup created: ${backupPath}`)
+            }
+
+            if (!gitignoreContent) {
+                throw new Error(
+                    `No content available for the ${templateName} template.`
+                )
+            }
+
+            writeFileSync(gitignorePath, gitignoreContent)
+
+            if (this.verbose) {
+                log.success(
+                    `Generated .gitignore file with ${templateName} template`
+                )
+            }
+        } catch (error) {
+            handleError(error, this.verbose)
+        }
+    }
 }
+
 export default glcIgnoreManager
