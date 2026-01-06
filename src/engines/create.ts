@@ -1,5 +1,5 @@
 import configStore from '../store.js'
-import type { tokenData } from './auth.js'
+import type { tokenData } from '../types/auth.js'
 import { confirm, intro, log, outro, text } from '@clack/prompts'
 import type { createOptionMap, createOptions } from '../types/create.js'
 import { basename } from 'path'
