@@ -14,6 +14,8 @@ import glcUndoManager from './engines/undo.js'
 import glcIgnoreManager from './engines/ignore.js'
 import glcRecoverManager from './engines/recover.js'
 import glcStatusManager from './engines/status.js'
+import glcSizeManager from './engines/size.js'
+import glcDoctorManager from './engines/doctor.js'
 
 /**
  * Main Program Setup
@@ -358,7 +360,9 @@ program.command('status').action(() => {
  * --built by glc
  */
 
-program.command('size').action(() => {})
+program.command('size').action(() => {
+    new glcSizeManager()
+})
 
 /**
  * doctor command
@@ -375,6 +379,8 @@ program.command('size').action(() => {})
  * - unused branches
  */
 
-program.command('doctor').action(() => {})
+program.command('doctor').action(() => {
+    new glcDoctorManager()
+})
 
 program.parse(process.argv)
