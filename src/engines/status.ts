@@ -14,7 +14,7 @@ import verboseLog from '../tools/verbose.js'
  */
 
 class glcStatusManager {
-    private isVerbose: boolean = true
+    private isVerbose: boolean = false
     constructor(isVerbose: boolean = true) {
         this.isVerbose = isVerbose
         this.status().catch((error) => {

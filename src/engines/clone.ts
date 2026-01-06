@@ -3,7 +3,7 @@ import type { cloneOptions, CloneOptionsMap } from '../types/clone.js'
 import { execa } from 'execa'
 import handleError from '../tools/handleError.js'
 import verboseLog from '../tools/verbose.js'
-
+import path from 'path'
 /**
  * Class to manage Git clone operations.
  * Supports cloning repositories with various options.
@@ -138,7 +138,7 @@ class glcCloneManager {
             // Execute git clone command
             const result = await execa('git', gitArgs)
             outro(
-                `Repository cloned successfully to: ${options.dir || process.cwd()}`
+                `Repository cloned successfully to: ${path.resolve(process.cwd(), options.dir || '')}`
             )
             return result
         } catch (error) {
