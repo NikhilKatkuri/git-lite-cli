@@ -173,8 +173,53 @@ class glcBranchManager {
         try {
             verboseLog('Executing git branch command...', this.verbose)
             const { stdout } = await execa('git', ['branch', '-a'])
-            console.log('\nBranches:')
-            console.log(stdout)
+
+            // Parse and format branch list
+            const branches = stdout
+                .split('\n')
+                .filter((branch) => branch.trim())
+            const localBranches: string[] = []
+            const remoteBranches: string[] = []
+            let currentBranch = ''
+
+            branches.forEach((branch) => {
+                const trimmedBranch = branch.trim()
+                if (trimmedBranch.startsWith('* ')) {
+                    currentBranch = trimmedBranch.substring(2)
+                    localBranches.push(trimmedBranch)
+                } else if (trimmedBranch.startsWith('remotes/')) {
+                    remoteBranches.push(trimmedBranch)
+                } else if (trimmedBranch) {
+                    localBranches.push(`  ${trimmedBranch}`)
+                }
+            })
+
+            log.info('Branch Overview:')
+            console.log()
+
+            if (currentBranch) {
+                log.success(`Current Branch: ${currentBranch}`)
+                console.log()
+            }
+
+            if (localBranches.length > 0) {
+                log.info('Local Branches:')
+                localBranches.forEach((branch) => {
+                    if (branch.startsWith('* ')) {
+                        console.log(`   ${branch}`)
+                    } else {
+                        console.log(`   ${branch}`)
+                    }
+                })
+                console.log()
+            }
+
+            if (remoteBranches.length > 0) {
+                log.info('Remote Branches:')
+                remoteBranches.forEach((branch) => {
+                    console.log(`   ${branch.replace('remotes/', '')}`)
+                })
+            }
         } catch (error) {
             handleError(error, this.verbose)
         }
@@ -226,13 +271,38 @@ class glcBranchManager {
     private async delete(branchName: string): Promise<void> {
         try {
             verboseLog(`Deleting branch ${branchName} ....`, this.verbose)
+            const currentBranch = await this.getCurrentBranchName()
+
+            if (currentBranch === branchName) {
+                log.error(
+                    `Cannot delete '${branchName}' because you are currently on it.`
+                )
+                log.info(
+                    `Suggestion: Switch to another branch first using "glc switch".`
+                )
+                return
+            }
+
             await execa('git', ['branch', '-d', branchName])
-            console.log(`Branch '${branchName}' deleted successfully.`)
+
+            log.info(`Branch '${branchName}' deleted successfully.`)
         } catch (error) {
             handleError(error, this.verbose)
         }
     }
 
+    private async getCurrentBranchName(): Promise<string> {
+        try {
+            const { stdout: currentBranch } = await execa('git', [
+                'branch',
+                '--show-current',
+            ])
+            return currentBranch.trim()
+        } catch (error) {
+            handleError(error, this.verbose)
+            return ''
+        }
+    }
     /**
      * Switch to the specified branch.
      *
@@ -242,9 +312,19 @@ class glcBranchManager {
 
     private async switch(branchName: string): Promise<void> {
         try {
+            const currentBranch = await this.getCurrentBranchName()
+
+            if (currentBranch === branchName) {
+                log.error(`your are already on '${branchName}'.`)
+                log.info(
+                    `Suggestion: Switch to another branch first using "glc switch".`
+                )
+                return
+            }
+
             verboseLog(`Switching to branch ${branchName} ....`, this.verbose)
             await execa('git', ['checkout', branchName])
-            console.log(`Switched to branch '${branchName}' successfully.`)
+            log.info(`Switched to branch '${branchName}' successfully.`)
         } catch (error) {
             handleError(error, this.verbose)
         }
