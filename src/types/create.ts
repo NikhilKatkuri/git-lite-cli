@@ -6,6 +6,7 @@ type createOptionMap = {
     private: boolean | undefined
     gitignore: string | undefined
     license: string | undefined
+    clone: boolean
 }
 
 type uses = {

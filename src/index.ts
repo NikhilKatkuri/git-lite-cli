@@ -108,6 +108,7 @@ program
         '--skip',
         'Skip the private , gitignore and license prompts for user'
     )
+    .option('--clone', 'Skip the clone process after repository creation')
     .option('--verbose, -V', 'Output detailed authentication information')
     .action(async (options) => {
         const createInstance = new glcCreateManager()
