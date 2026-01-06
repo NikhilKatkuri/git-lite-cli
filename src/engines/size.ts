@@ -6,6 +6,7 @@ class glcSizeManager {
             "The 'glc size' command is under development and will be available in a future release."
         )
     }
+    public run() {}
 }
 
 export default glcSizeManager

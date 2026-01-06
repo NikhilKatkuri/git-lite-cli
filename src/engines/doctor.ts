@@ -11,6 +11,7 @@ class glcDoctorManager {
             "The 'glc doctor' command is under development and will be available in a future release."
         )
     }
+    public run() {}
 }
 
 export default glcDoctorManager

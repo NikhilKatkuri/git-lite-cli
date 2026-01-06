@@ -17,6 +17,8 @@ class glcStatusManager {
     private isVerbose: boolean = false
     constructor(isVerbose: boolean = true) {
         this.isVerbose = isVerbose
+    }
+    public async run() {
         this.status().catch((error) => {
             verboseLog(
                 `Status initialization error: ${String(error)}`,

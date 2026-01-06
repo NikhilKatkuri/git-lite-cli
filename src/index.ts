@@ -22,6 +22,7 @@ import glcRecoverManager from './engines/recover.js'
 import glcStatusManager from './engines/status.js'
 import glcSizeManager from './engines/size.js'
 import glcDoctorManager from './engines/doctor.js'
+import trackCommand from './boom/queue.js'
 
 /**
  * Main Program Setup
@@ -56,8 +57,9 @@ program
     .option('--show-all, -s', 'Show all account details')
     .option('--verbose, -V', 'Output detailed authentication information')
     .action(async (options) => {
-        const authInstance = new AuthenticationManager()
-        await authInstance.run(options)
+        await trackCommand('auth', () =>
+            new AuthenticationManager().run(options)
+        )
     })
 
 /**
@@ -71,9 +73,10 @@ program
     .command('whoami')
     .description('Display the current authenticated user')
     .option('--json, -j', 'Output in JSON format')
-    .action((options) => {
-        const authInstance = new AuthenticationManager()
-        authInstance.whoAmI(options.json ? 'json' : 'text')
+    .action(async (options) => {
+        await trackCommand('whoami', () => {
+            new AuthenticationManager().whoAmI(options.json ? 'json' : 'text')
+        })
     })
 
 /**
@@ -111,8 +114,7 @@ program
     .option('--clone', 'Skip the clone process after repository creation')
     .option('--verbose, -V', 'Output detailed authentication information')
     .action(async (options) => {
-        const createInstance = new glcCreateManager()
-        await createInstance.run(options)
+        await trackCommand('create', () => new glcCreateManager().run(options))
     })
 
 /**
@@ -151,8 +153,7 @@ program
     .option('-m, --message <message>', 'Commit message')
     .option('--verbose, -V', 'Output detailed authentication information')
     .action(async (options) => {
-        const saveInstance = new glcSaveManager()
-        await saveInstance.run(options)
+        await trackCommand('save', () => new glcSaveManager().run(options))
     })
 
 /**
@@ -190,8 +191,7 @@ program
     .option('--verbose, -V', 'Output detailed authentication information')
     .description('Specify the branch to save changes to')
     .action(async (options) => {
-        const syncInstance = new glcSyncManager()
-        await syncInstance.run(options)
+        await trackCommand('sync', () => new glcSyncManager().run(options))
     })
 
 /**
@@ -221,8 +221,7 @@ program
     .option('-s, --switch <branch-name>', 'Switch to the specified branch')
     .option('--verbose, -V', 'Output detailed authentication information')
     .action(async (options) => {
-        const branchInstance = new glcBranchManager()
-        await branchInstance.run(options)
+        await trackCommand('branch', () => new glcBranchManager().run(options))
     })
 
 /**
@@ -247,8 +246,7 @@ program
     .option('--no-skip', 'Skip prompts and use provided options directly')
     .option('--verbose, -V', 'Output detailed authentication information')
     .action(async (options) => {
-        const cloneInstance = new glcCloneManager()
-        await cloneInstance.run(options)
+        await trackCommand('clone', () => new glcCloneManager().run(options))
     })
 
 /**
@@ -261,8 +259,9 @@ program
     .command('ignore [template]')
     .option('--verbose, -V', 'Output detailed authentication information')
     .action(async (template, options) => {
-        const ignoreInstance = new glcIgnoreManager()
-        await ignoreInstance.run({ template, ...options })
+        await trackCommand('ignore', () =>
+            new glcIgnoreManager().run({ template, ...options })
+        )
     })
 
 /**
@@ -288,8 +287,7 @@ program
     .option('--amend', 'Revert the last commit and prepare to amend it')
     .option('--verbose, -V', 'Output detailed authentication information')
     .action(async (options) => {
-        const undoInstance = new glcUndoManager()
-        await undoInstance.run(options)
+        await trackCommand('undo', () => new glcUndoManager().run(options))
     })
 /**
  * unstage command Unstage files that have been staged for commit.
@@ -315,8 +313,7 @@ program
     )
     .option('--verbose, -V', 'Output detailed authentication information')
     .action(async (options) => {
-        const unstageInstance = new unStageManager()
-        await unstageInstance.run(options)
+        await trackCommand('unstage', () => new unStageManager().run(options))
     })
 
 /**
@@ -336,8 +333,9 @@ program
     .option('--all', 'Recover all ignored files (requires confirmation)')
     .option('-n, --dry-run', 'Preview files that would be recovered')
     .action(async (files, options) => {
-        const recoverInstance = new glcRecoverManager()
-        await recoverInstance.run({ files, ...options })
+        await trackCommand('recover', () =>
+            new glcRecoverManager().run({ files, ...options })
+        )
     })
 
 /**
@@ -354,8 +352,8 @@ program
  * Enhanced with glc-specific terminology and cleaner output formatting.
  */
 
-program.command('status').action(() => {
-    new glcStatusManager()
+program.command('status').action(async () => {
+    await trackCommand('status', () => new glcStatusManager().run())
 })
 
 /**
@@ -367,8 +365,8 @@ program.command('status').action(() => {
  * --built by glc
  */
 
-program.command('size').action(() => {
-    new glcSizeManager()
+program.command('size').action(async () => {
+    await trackCommand('size', () => new glcSizeManager().run())
 })
 
 /**
@@ -386,8 +384,8 @@ program.command('size').action(() => {
  * - unused branches
  */
 
-program.command('doctor').action(() => {
-    new glcDoctorManager()
+program.command('doctor').action(async () => {
+    await trackCommand('doctor', () => new glcDoctorManager().run())
 })
 
 program.parse(process.argv)
