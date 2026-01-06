@@ -13,6 +13,7 @@ import unStageManager from './engines/unStage.js'
 import glcUndoManager from './engines/undo.js'
 import glcIgnoreManager from './engines/ignore.js'
 import glcRecoverManager from './engines/recover.js'
+import glcStatusManager from './engines/status.js'
 
 /**
  * Main Program Setup
@@ -339,13 +340,14 @@ program
  * status command
  * this command displays the current status of the repository,
  * including staged, unstaged, and untracked files.
- * It provides a summary of changes and helps users understand
+ * It provides a clean, glc-branded summary of changes and helps users understand
  * what actions need to be taken before committing.
- * below link for more details on git status from the offical documentation of git
- * @see {@link https://git-scm.com/docs/git-status} for more details
+ * Enhanced with glc-specific terminology and cleaner output formatting.
  */
 
-program.command('status').action(() => {})
+program.command('status').action(() => {
+    new glcStatusManager()
+})
 
 /**
  * size command

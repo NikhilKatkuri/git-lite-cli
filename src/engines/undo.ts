@@ -57,7 +57,6 @@ class glcUndoManager {
             case 'soft':
                 await this.softUndo()
                 break
-            case 'ammend':
             case 'amend':
                 await this.ammendUndo()
                 break
