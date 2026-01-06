@@ -6,6 +6,23 @@ import path from 'path'
 import { request } from 'undici'
 import verboseLog from '../tools/verbose.js'
 
+/**
+ * glcIgnoreManager class to handle the 'glc ignore' command.
+ * Generates a .gitignore file based on selected templates.
+ * @class glcIgnoreManager
+ *
+ * @public run
+ *
+ * @method run - Main method to execute the ignore file generation.
+ *
+ * @param options - Options for the ignore command, including template and verbosity.
+ * @method getTemplateName - Prompts the user to select a template if not provided.
+ * @method fetchTemplate - Fetches the .gitignore template from GitHub.
+ * @method getTemplateContent - Provides local fallback templates.
+ * @method applyTemplate - Writes the .gitignore file to the current directory.
+ *
+ */
+
 class glcIgnoreManager {
     private verbose: boolean = false
     private TEMPLATES = {
@@ -36,6 +53,10 @@ class glcIgnoreManager {
         Rails: 'Rails',
     }
 
+    /**
+     *  Run the ignore manager with provided options.
+     * @param options  - ignoreOptions
+     */
     public async run(options: ignoreOptions) {
         this.verbose = options.verbose ?? false
 
@@ -54,6 +75,10 @@ class glcIgnoreManager {
             handleError(error, this.verbose)
         }
     }
+    /**
+     * Prompt user to select a template if not provided.
+     * @returns promise<string>
+     */
 
     private async getTemplateName(): Promise<string> {
         const template = await select({
@@ -74,6 +99,11 @@ class glcIgnoreManager {
         return template
     }
 
+    /**
+     * Fetch .gitignore template from GitHub.
+     * @param name string
+     * @returns promise<string | null>
+     */
     private async fetchTemplate(name: string): Promise<string | null> {
         const githubTemplateName =
             this.TEMPLATES[name as keyof typeof this.TEMPLATES] || name
@@ -108,6 +138,12 @@ class glcIgnoreManager {
         }
     }
 
+    /**
+     *  Get local template content as fallback.
+     * @param templateName  string
+     * @returns string
+     */
+
     private getTemplateContent(templateName: string): string {
         const templates = {
             'Node.js': this.getNodeTemplate(),
@@ -136,6 +172,8 @@ class glcIgnoreManager {
         const template = templates[templateName as keyof typeof templates]
         return template || this.getGenericTemplate()
     }
+
+    /**   fallbacks  **/
 
     private getNodeTemplate(): string {
         return `# Dependencies

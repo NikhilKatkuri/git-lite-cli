@@ -4,8 +4,27 @@ import handleError from '../tools/handleError.js'
 import { execa } from 'execa'
 import verboseLog from '../tools/verbose.js'
 
+/**
+ * glcUndoManager handles the 'glc undo' command operations.
+ * Supports hard, soft, and amend undo operations.
+ *
+ * @public run
+ * @method determineAction
+ * @method handleAction
+ * @method hardUndo
+ * @method softUndo
+ * @method ammendUndo
+ * @method promptToUser
+ * @method confirmationToUser
+ */
+
 class glcUndoManager {
     private verbose: boolean = false
+    /**
+     *  Run the undo manager with provided options.
+     * @param options undoOptions
+     * @returns Promise<void>
+     */
     public async run(options: undoOptions): Promise<void> {
         intro('Git Undo Manager')
         const {
@@ -24,6 +43,12 @@ class glcUndoManager {
             handleError(error, this.verbose)
         }
     }
+
+    /**
+     *  Determine the undo action based on provided options.
+     * @param options Partial<undoOptionsMap>
+     * @returns Promise<void>
+     */
 
     private async determineAction(
         options: Partial<undoOptionsMap>
@@ -49,6 +74,13 @@ class glcUndoManager {
         }
         await this.handleAction(actionFiltered[0])
     }
+
+    /**
+     *  Handle the specific undo action.
+     * @param action string
+     * @returns Promise<void>
+     */
+
     private async handleAction(action: string): Promise<void> {
         switch (action) {
             case 'hard':
@@ -66,6 +98,13 @@ class glcUndoManager {
         log.success(`${action} undo operation completed successfully.`)
         outro('Undo operation completed.')
     }
+
+    /**
+     *  Perform a hard undo (git reset --hard HEAD~1).
+     * @returns Promise<void>
+     *
+     */
+
     private async hardUndo(): Promise<void> {
         try {
             verboseLog(
@@ -79,6 +118,12 @@ class glcUndoManager {
             throw error
         }
     }
+
+    /**
+     *  Perform a soft undo (git reset --soft HEAD~1).
+     * @return Promise<void>
+     */
+
     private async softUndo(): Promise<void> {
         try {
             verboseLog(
@@ -92,6 +137,12 @@ class glcUndoManager {
             throw error
         }
     }
+
+    /**
+     *  Perform an amend undo (git reset --soft HEAD~1).
+     * @return Promise<void>
+     */
+
     private async ammendUndo(): Promise<void> {
         try {
             verboseLog(
@@ -105,6 +156,10 @@ class glcUndoManager {
             throw error
         }
     }
+    /**
+     * Prompt the user to select an undo action.
+     * @returns Promise<void>
+     */
 
     private async promptToUser(): Promise<void> {
         const action = await select({
@@ -123,6 +178,12 @@ class glcUndoManager {
         }
         await this.handleAction(action)
     }
+
+    /**
+     *  Get user confirmation for the action.
+     * @param message   string
+     * @returns Promise<boolean>
+     */
 
     private async confirmationToUser(message: string): Promise<boolean> {
         const action = await confirm({ message, initialValue: false })

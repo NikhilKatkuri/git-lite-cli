@@ -1,9 +1,15 @@
 #! /usr/bin/env node
+
+// Enable Node.js module compile cache for improved performance
 import { enableCompileCache } from 'node:module'
 enableCompileCache()
+
+// imports for commander and pkgjson
 import { Command } from 'commander'
 import pkgJson from '../package.json' with { type: 'json' }
-import { AuthenticationManager } from './engines/auth.js'
+
+// Engine Managers
+import AuthenticationManager from './engines/auth.js'
 import glcSaveManager from './engines/save.js'
 import glcCreateManager from './engines/create.js'
 import glcCloneManager from './engines/clone.js'
@@ -368,7 +374,7 @@ program.command('size').action(() => {
  * doctor command
  * this command checks the health of the repository,
  * identifying common issues and suggesting fixes.
- * * diagnostics performed:
+ * diagnostics should performed by doctor command:
  * - git binary files check
  * - glc auth state
  * - repository integrity

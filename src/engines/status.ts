@@ -1,5 +1,18 @@
 import { execa } from 'execa'
 import verboseLog from '../tools/verbose.js'
+
+/**
+ * glcStatusManager handles the 'glc status' command operations.
+ * Provides a clean, glc-branded view of the git status.
+ *
+ * @public run
+ *
+ * @method status
+ * @method formatGlcStatus
+ * @method getFileStatus
+ *
+ */
+
 class glcStatusManager {
     private isVerbose: boolean = true
     constructor(isVerbose: boolean = true) {
@@ -11,7 +24,13 @@ class glcStatusManager {
             )
         })
     }
-    public async status() {
+
+    /**
+     * Run the status manager to display git status.
+     * @returns Promise<Boolean>
+     */
+
+    public async status(): Promise<Boolean> {
         try {
             // Get detailed git status information
             const { stdout: status } = await execa('git', [
@@ -44,6 +63,10 @@ class glcStatusManager {
 
     /**
      * Format git status output into a clean glc-branded view
+     * @param status string
+     * @param branch string
+     * @param remoteInfo string
+     * @returns string
      */
     public formatGlcStatus(
         status: string,
@@ -58,13 +81,18 @@ class glcStatusManager {
             return `On branch ${branch}\n│  \n│  Working directory clean`
         }
 
+        //   Construct branch status message
+
         let branchStatus = `On branch ${branch}`
 
+        //   Analyze ahead/behind status
         if (branchLine.includes('ahead')) {
             const ahead = branchLine.match(/ahead (\d+)/)
+
             if (ahead)
                 branchStatus += `\n│  Your branch is ahead of 'origin/${branch}' by ${ahead[1]} commit${ahead[1] !== '1' ? 's' : ''}.`
         } else if (branchLine.includes('behind')) {
+            // Branch is behind
             const behind = branchLine.match(/behind (\d+)/)
             if (behind)
                 branchStatus += `\n│  Your branch is behind 'origin/${branch}' by ${behind[1]} commit${behind[1] !== '1' ? 's' : ''}.`
@@ -78,11 +106,12 @@ class glcStatusManager {
         if (lines.length === 0) {
             return `${branchStatus}\n│  \n│  Working directory clean`
         }
-
+        //   Categorize changes
         const staged = lines.filter(
             (line) =>
                 line[0] !== ' ' && line[0] !== '?' && line[0] !== undefined
         )
+
         const unstaged = lines.filter(
             (line) =>
                 line.length >= 2 &&
@@ -94,6 +123,7 @@ class glcStatusManager {
 
         let output = `${branchStatus}\n│  `
 
+        //   Format staged, unstaged, and untracked changes
         if (staged.length > 0) {
             output += `\n│  Changes staged for commit:\n│    (use "glc undo --soft" to unstage)\n`
             staged.forEach((line) => {
@@ -105,6 +135,7 @@ class glcStatusManager {
             })
             output += `│  `
         }
+        //   Format unstaged changes
 
         if (unstaged.length > 0) {
             output += `\n│  Changes not staged for commit:\n│    (use "glc save --all" to stage and commit all changes)\n│    (use "glc recover <file>..." to discard changes in working directory)\n`
@@ -117,6 +148,7 @@ class glcStatusManager {
             })
             output += `│  `
         }
+        //   Format untracked files
 
         if (untracked.length > 0) {
             output += `\n│  Untracked files:\n│    (use "glc save --all" to include in what will be committed)\n`
@@ -129,6 +161,7 @@ class glcStatusManager {
             output += `│  `
         }
 
+        //   Final hints based on staging status
         if (
             staged.length === 0 &&
             (unstaged.length > 0 || untracked.length > 0)
@@ -140,6 +173,12 @@ class glcStatusManager {
 
         return output
     }
+
+    /**
+     * Get human-readable file status from git status code
+     * @param code string | undefined
+     * @returns string
+     */
 
     public getFileStatus(code: string | undefined): string {
         switch (code) {

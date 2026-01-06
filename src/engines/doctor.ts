@@ -1,5 +1,10 @@
 import { log } from '@clack/prompts'
 
+/**
+ * glcDoctorManager class to handle the 'glc doctor' command.
+ * Currently, this command is under development.
+ * @class glcDoctorManager
+ */
 class glcDoctorManager {
     constructor() {
         log.info(

@@ -375,9 +375,4 @@ class AuthenticationManager {
     }
 }
 
-export {
-    AuthenticationManager,
-    type options,
-    type optionsRecord,
-    type tokenData,
-}
+export default AuthenticationManager

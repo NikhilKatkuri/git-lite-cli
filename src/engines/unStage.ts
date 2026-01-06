@@ -4,8 +4,30 @@ import handleError from '../tools/handleError.js'
 import { execa } from 'execa'
 import verboseLog from '../tools/verbose.js'
 
+/**
+ * unStageManager handles the 'glc unstage' command operations.
+ * Supports various unstage options including all files, specific files, interactive mode, and staged files only.
+ *
+ * @public run
+ *
+ * @method unStageAll - Unstages all files
+ * @method unStageFile - Unstages a specific file
+ * @method unStageInteractive - Interactive unstage mode
+ * @method unStageOnlyStagedFiles - Unstages only staged files
+ * @method promptToUser - Prompts user for unstage options
+ * @method getFileName - Gets file name input from user
+ * @method confirmationToUser - Gets confirmation from user
+ */
+
 class unStageManager {
     private verbose: boolean = false
+
+    /**
+     * Run the unstage manager with provided options.
+     * @param options unStageOption
+     * @returns Promise<void>
+     */
+
     public async run(options: unStageOption): Promise<void> {
         intro('Git Unstage Manager')
 
@@ -43,6 +65,12 @@ class unStageManager {
         )
     }
 
+    /**
+     *  Handle the unstage action based on user input.
+     * @param arg [keyof Omit<unStageOption, 'verbose'>, string | boolean]
+     * @returns Promise<void>
+     */
+
     private async boom(
         arg: [keyof Omit<unStageOption, 'verbose'>, string | boolean]
     ): Promise<void> {
@@ -52,6 +80,13 @@ class unStageManager {
             handleError(error, this.verbose)
         }
     }
+
+    /**
+     *  Handle specific unstage action based on user input.
+     * @param action [keyof Omit<unStageOption, 'verbose'>, string | boolean]
+     * @returns Promise<void>
+     */
+
     private async handleAction(
         action: [keyof Omit<unStageOption, 'verbose'>, string | boolean]
     ): Promise<void> {
@@ -76,6 +111,12 @@ class unStageManager {
             handleError(error, this.verbose)
         }
     }
+
+    /**
+     *  Unstage all files in the git repository.
+     * @returns Promise<void>
+     */
+
     private async unStageAll(): Promise<void> {
         try {
             verboseLog('Checking for staged files...', this.verbose)
@@ -102,6 +143,12 @@ class unStageManager {
         }
     }
 
+    /**
+     *  Unstage a specific file.
+     * @param file string
+     * @returns Promise<void>
+     */
+
     private async unStageFile(file: string): Promise<void> {
         try {
             verboseLog(`Unstaging file: ${file}...`, this.verbose)
@@ -112,6 +159,11 @@ class unStageManager {
             throw error
         }
     }
+
+    /**
+     *  Interactive unstage mode.
+     *  @returns Promise<void>
+     */
 
     private async unStageInteractive(): Promise<void> {
         try {
@@ -124,6 +176,10 @@ class unStageManager {
         }
     }
 
+    /**
+     *  Unstage only staged files.
+     * @returns Promise<void>
+     */
     private async unStageOnlyStagedFiles(): Promise<void> {
         try {
             verboseLog('Checking for staged files...', this.verbose)
@@ -152,6 +208,11 @@ class unStageManager {
         }
     }
 
+    /**
+     *  Prompt user for unstage options.
+     * @returns Promise<string>
+     */
+
     private async promptToUser(): Promise<string> {
         const action = await select({
             message: 'Select an unstage option:',
@@ -171,7 +232,7 @@ class unStageManager {
         }
         let fileName: string = ''
         if (action === 'file') {
-            fileName = await this.getFileName(action)
+            fileName = await this.getFileName()
         }
         await this.boom([
             action as keyof Omit<unStageOption, 'verbose'>,
@@ -180,7 +241,14 @@ class unStageManager {
         outro('Unstage operation completed.')
         return action
     }
-    private async getFileName(action: string): Promise<string> {
+
+    /**
+     *  Get file name input from user.
+     * @param action string
+     * @returns Promise<string>
+     */
+
+    private async getFileName(): Promise<string> {
         const fileName = await text({
             message: 'Enter the file name to unstage:',
             validate: (value) => {
@@ -198,6 +266,13 @@ class unStageManager {
         }
         return fileName
     }
+
+    /**
+     * Get confirmation from user.
+     * @param message  string
+     * @returns Promise<boolean>
+     */
+
     private async confirmationToUser(message: string): Promise<boolean> {
         const action = await confirm({ message, initialValue: false })
         if (typeof action === 'symbol') {

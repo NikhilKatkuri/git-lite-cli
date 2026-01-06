@@ -7,6 +7,14 @@ import handleError from '../tools/handleError.js'
 
 /**
  * Class to manage saving changes to a git repository.
+ *
+ * @public run
+ * @method prepareActions
+ * @method initRepo
+ * @method all
+ * @method exclude
+ * @method commit
+ * @method getPromptedMessage
  */
 
 class glcSaveManager {
