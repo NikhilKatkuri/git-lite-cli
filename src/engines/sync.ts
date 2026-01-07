@@ -105,7 +105,7 @@ class glcSyncManager {
      */
 
     private async push(noPush: boolean = false): Promise<void> {
-        if (!noPush) {
+        if (noPush) {
             verboseLog('Skipping push operation.', this.verbose)
             return
         }
