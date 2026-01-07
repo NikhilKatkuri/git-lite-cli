@@ -5,7 +5,7 @@
         "types": ["node"],
         /* Project references and incremental builds for speed */
         "incremental": true,
-        "composite": true,
+        "composite": false,
 
         /* Modules - Use NodeNext for native ESM support */
         "module": "NodeNext",
@@ -16,6 +16,9 @@
         "rootDir": "./src",
         "outDir": "./dist",
         "sourceMap": true,
+        "declaration": true,
+        "declarationMap": true,
+        "emitDeclarationOnly": false,
 
         /* Strictness and interop constraints */
         "strict": true,

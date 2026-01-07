@@ -1,0 +1,60 @@
+# Source files
+src/
+tsconfig.json
+tsconfig.tsbuildinfo
+
+# Development files
+.prettierrc.json
+.prettierignore
+pnpm-workspace.yaml
+.gitignore
+
+# Development dependencies and caches
+node_modules/
+.pnpm-store/
+.npm/
+.yarn/
+yarn.lock
+package-lock.json
+
+# Build artifacts (except dist)
+*.tsbuildinfo
+
+# Development and testing
+coverage/
+.nyc_output/
+test/
+tests/
+__tests__/
+*.test.*
+*.spec.*
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitattributes
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment files
+.env
+.env.*
+
+# Temporary files
+tmp/
+temp/

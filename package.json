@@ -1,7 +1,16 @@
 {
     "name": "git-lite-cli",
     "version": "3.0.0",
-    "description": "",
+    "description": "A high-performance, developer-friendly CLI tool designed to simplify complex Git workflows with safety and best practices built-in.",
+    "keywords": [
+        "git",
+        "cli",
+        "github",
+        "version-control",
+        "developer-tools",
+        "git-workflow",
+        "git-assistant"
+    ],
     "homepage": "https://github.com/NikhilKatkuri/git-lite-cli#readme",
     "bugs": {
         "url": "https://github.com/NikhilKatkuri/git-lite-cli/issues"
@@ -11,19 +20,46 @@
         "url": "git+https://github.com/NikhilKatkuri/git-lite-cli.git"
     },
     "license": "MIT",
-    "author": "Nikhil KATKURI",
+    "author": {
+        "name": "Nikhil Katkuri",
+        "email": "nikhilkatkuri@gmail.com",
+        "url": "https://github.com/NikhilKatkuri"
+    },
     "type": "module",
-    "main": "index.js",
+    "main": "./dist/index.js",
+    "module": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "import": "./dist/index.js",
+            "require": "./dist/index.js",
+            "types": "./dist/index.d.ts"
+        }
+    },
     "bin": {
         "glc": "./dist/index.js"
     },
+    "files": [
+        "dist/**/*",
+        "README.md",
+        "LICENSE",
+        "SECURITY.md"
+    ],
+    "engines": {
+        "node": ">=18.0.0"
+    },
+    "packageManager": "pnpm@9.0.0",
     "scripts": {
         "build": "tsc",
+        "build:clean": "powershell -Command \"Remove-Item -Recurse -Force dist -ErrorAction SilentlyContinue\" && tsc",
         "dev": "ts-node src/index.ts",
         "format": "prettier --write .",
         "format:check": "prettier --check .",
+        "lint": "tsc --noEmit",
+        "prepublishOnly": "npm run build:clean",
+        "prepack": "npm run build",
         "release": "release-it",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "typecheck": "tsc --noEmit"
     },
     "devDependencies": {
         "@tsconfig/node24": "^24.0.3",
@@ -31,8 +67,7 @@
         "prettier": "^3.7.4",
         "release-it": "^19.2.2",
         "ts-node": "^10.9.2",
-        "typescript": "^5.9.3",
-        "vitest": "^4.0.16"
+        "typescript": "^5.9.3"
     },
     "dependencies": {
         "@clack/prompts": "^0.11.0",
