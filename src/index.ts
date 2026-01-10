@@ -275,11 +275,15 @@ program
     .option('--verbose, -V', 'Output detailed operation information')
     .option('--dry-run, -n', 'Preview what would be done without executing')
     .action(async (options) => {
-        if (options.dryRun) {
-            await trackCommand('autopilot', () => glcPilot.dryRun(options))
-        } else {
-            await trackCommand('autopilot', () => glcPilot.quickRun(options))
-        }
+        await trackCommand('autopilot', async () => {
+            if (options.dryRun) {
+                await trackCommand('autopilot', () => glcPilot.dryRun(options))
+            } else {
+                await trackCommand('autopilot', () =>
+                    glcPilot.quickRun(options)
+                )
+            }
+        })
     })
 
 /**
@@ -383,9 +387,18 @@ program.command('status').action(async () => {
  * --built by glc
  */
 
-program.command('size').action(async () => {
-    await trackCommand('size', () => new glcSizeManager().run())
-})
+program
+    .command('size')
+    .option('-d, --details', 'Show detailed file breakdown')
+    .option(
+        '-l, --large [threshold]',
+        'Highlight files larger than threshold (in MB, default: 10)'
+    )
+    .option('-t, --top [count]', 'Show top N largest files (default: 10)')
+    .option('--verbose, -V', 'Output detailed size information')
+    .action(async (options) => {
+        await trackCommand('size', () => new glcSizeManager().run(options))
+    })
 
 /**
  * doctor command
