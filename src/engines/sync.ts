@@ -33,9 +33,11 @@ class glcSyncManager {
      * @returns Promise<void>
      */
 
-    public async run(options: synchOptions): Promise<void> {
+    public async run(
+        options: synchOptions,
+        skipIntro: boolean = false
+    ): Promise<void> {
         intro('Git Sync Operation')
-
         const { verbose = false, ...args } = options
         this.verbose = verbose
 
@@ -72,6 +74,19 @@ class glcSyncManager {
             outro('Sync operation failed.')
             handleError(error, verbose)
         }
+    }
+
+    public async pilot(): Promise<void> {
+        await this.run(
+            {
+                noStash: false,
+                noPull: false,
+                noPush: false,
+                branch: '',
+                verbose: this.verbose,
+            },
+            true
+        )
     }
 
     /**

@@ -79,7 +79,7 @@ class glcSaveManager {
      * @param isVerbose  boolean
      */
 
-    private async prepareActions(
+    public async prepareActions(
         options: SaveOptionMap,
         isVerbose: boolean
     ): Promise<void> {
@@ -92,6 +92,23 @@ class glcSaveManager {
         await this.commit(options.message, isVerbose)
     }
 
+    public async pilot(verbose: boolean = false): Promise<void> {
+        try {
+            const isGate = await gate()
+            if (!isGate) return
+            const message = await this.getPromptedMessage()
+            await this.prepareActions(
+                {
+                    message,
+                    all: true,
+                    exclude: [],
+                },
+                false
+            )
+        } catch (error) {
+            handleError(error, verbose)
+        }
+    }
     /**
      * Initialize a new git repository if required.
      * @param toInit  boolean
@@ -99,7 +116,7 @@ class glcSaveManager {
      * @returns Promise<void>
      */
 
-    private async initRepo(toInit: boolean, isVerbose: boolean): Promise<void> {
+    public async initRepo(toInit: boolean, isVerbose: boolean): Promise<void> {
         if (!toInit) {
             return
         }

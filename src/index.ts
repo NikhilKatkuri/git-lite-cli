@@ -23,6 +23,7 @@ import glcStatusManager from './engines/status.js'
 import glcSizeManager from './engines/size.js'
 import glcDoctorManager from './engines/doctor.js'
 import trackCommand from './boom/queue.js'
+import glcPilot from './engines/pilot.js'
 
 /**
  * Main Program Setup
@@ -262,6 +263,23 @@ program
         await trackCommand('ignore', () =>
             new glcIgnoreManager().run({ template, ...options })
         )
+    })
+
+/**
+ * autopilot command
+ * commit and push changes automatically to current branch only
+ */
+program
+    .command('autopilot')
+    .description('Auto commit and push changes')
+    .option('--verbose, -V', 'Output detailed operation information')
+    .option('--dry-run, -n', 'Preview what would be done without executing')
+    .action(async (options) => {
+        if (options.dryRun) {
+            await trackCommand('autopilot', () => glcPilot.dryRun(options))
+        } else {
+            await trackCommand('autopilot', () => glcPilot.quickRun(options))
+        }
     })
 
 /**
