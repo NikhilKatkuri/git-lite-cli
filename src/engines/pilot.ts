@@ -108,7 +108,6 @@ class glcPilot {
             }
 
             if (gateResult) {
-                log.success('Git environment verified')
                 verboseLog('Repository is ready for operations', this.verbose)
                 return true
             } else {
@@ -207,34 +206,17 @@ class glcPilot {
      * @returns Promise<boolean> - Success status
      */
     private async executeSaveOperation(): Promise<boolean> {
-        log.info('Starting save operation...')
-        verboseLog('Initializing save manager...', this.verbose)
-
-        const s = spinner()
-        s.start('Saving changes...')
+        verboseLog('Executing save operation...', this.verbose)
 
         try {
             const saveManager = new glcSaveManager()
             await saveManager.pilot(this.verbose)
 
-            s.stop()
-            log.success('Save operation completed')
             verboseLog('Changes have been committed successfully', this.verbose)
             return true
         } catch (error) {
-            s.stop()
             log.error('Save operation failed')
             verboseLog(`Save error details: ${error}`, this.verbose)
-
-            const retry = await confirm({
-                message: 'Would you like to retry the save operation?',
-                initialValue: false,
-            })
-
-            if (retry && typeof retry !== 'symbol') {
-                return await this.executeSaveOperation()
-            }
-
             return false
         }
     }
@@ -244,34 +226,17 @@ class glcPilot {
      * @returns Promise<boolean> - Success status
      */
     private async executeSyncOperation(): Promise<boolean> {
-        log.info('Starting sync operation...')
-        verboseLog('Initializing sync manager...', this.verbose)
-
-        const s = spinner()
-        s.start('Syncing with remote...')
+        verboseLog('Executing sync operation...', this.verbose)
 
         try {
             const syncManager = new glcSyncManager()
             await syncManager.pilot()
 
-            s.stop()
-            log.success('Sync operation completed')
             verboseLog('Repository synchronized with remote', this.verbose)
             return true
         } catch (error) {
-            s.stop()
             log.error('Sync operation failed')
             verboseLog(`Sync error details: ${error}`, this.verbose)
-
-            const retry = await confirm({
-                message: 'Would you like to retry the sync operation?',
-                initialValue: false,
-            })
-
-            if (retry && typeof retry !== 'symbol') {
-                return await this.executeSyncOperation()
-            }
-
             return false
         }
     }
@@ -291,12 +256,6 @@ class glcPilot {
 
         try {
             verboseLog('Running in quick mode...', pilot.verbose)
-
-            const isGitReady = await pilot.verifyGitEnvironment()
-            if (!isGitReady) {
-                outro('Git environment not ready')
-                return
-            }
 
             await pilot.executeWorkflow({ autoConfirm: true })
             outro('Quick pilot completed!')
