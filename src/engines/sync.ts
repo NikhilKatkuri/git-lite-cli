@@ -97,7 +97,7 @@ class glcSyncManager {
      */
 
     private async pull(noPull: boolean = false): Promise<void> {
-        if (!noPull) {
+        if (noPull) {
             verboseLog('Skipping pull operation.', this.verbose)
             return
         }
@@ -143,7 +143,7 @@ class glcSyncManager {
      */
 
     private async stash(noStash: boolean = false): Promise<void> {
-        if (!noStash) {
+        if (noStash) {
             verboseLog('Skipping stash operation.', this.verbose)
             return
         }
