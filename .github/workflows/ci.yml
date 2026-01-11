@@ -8,8 +8,10 @@ on:
 
 jobs:
   test:
+    name: Test (${{ matrix.os }}, Node ${{ matrix.node-version }})
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false # Ensures one failure doesn't cancel other OS tests
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
         node-version: [18.x, 20.x, 22.x]
@@ -18,62 +20,63 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 9.0.0
 
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "pnpm"
+
       - name: Install dependencies
         run: pnpm install
 
-      - name: Type check
-        run: pnpm run typecheck
-
-      - name: Build
-        run: pnpm run build
-
-      - name: Format
-        run: pnpm run format
+      - name: Quality Checks
+        run: |
+          pnpm run typecheck
+          pnpm run build
+          pnpm run format
 
       - name: Test CLI installation
         run: |
-          npm pack
-          npm install -g git-lite-cli-*.tgz
+          pnpm build
+          npm link
 
-      - name: Test basic commands (Unix)
+      - name: Integration Tests (Unix)
         if: matrix.os != 'windows-latest'
         run: |
-          # Create a test directory
           mkdir test-repo
           cd test-repo
           git init
           git config user.name "Test User"
           git config user.email "test@example.com"
-
-          # Test basic commands
           echo "# Test" > README.md
-          glc save "Initial commit"
+          glc save -m "Initial commit"
           glc status
           glc branch --list
+          echo "change" >> README.md
+          glc save -m "Update"
+          glc sync --no-push
+          glc size
+          glc doctor
 
-      - name: Test basic commands (Windows)
+      - name: Integration Tests (Windows)
         if: matrix.os == 'windows-latest'
         shell: pwsh
         run: |
-          # Create a test directory
           New-Item -ItemType Directory -Name "test-repo"
           Set-Location "test-repo"
           git init
           git config user.name "Test User"
           git config user.email "test@example.com"
-
-          # Test basic commands
           "# Test" | Out-File -FilePath "README.md"
-          glc save "Initial commit"
+          glc save -m "Initial commit"
           glc status
           glc branch --list
+          Add-Content README.md "change"
+          glc save -m "Update"
+          glc size
+          glc doctor
