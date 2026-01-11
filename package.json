@@ -58,7 +58,7 @@
         "format": "prettier --write .",
         "format:check": "prettier --check .",
         "lint": "tsc --noEmit",
-        "prepublishOnly": "npm run build:clean",
+        "prepublishOnly": "npm run build",
         "prepack": "npm run build",
         "publish:npm": "npm publish",
         "publish:all": "npm run build:clean && npm publish",

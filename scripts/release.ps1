@@ -1,5 +1,5 @@
-#!/usr/bin/env powershell
-# Release script for Git Lite CLI - supports npm, yarn, and pnpm
+#!/usr/bin/env pwsh
+# Release script for Git Lite CLI - cross-platform PowerShell support
 
 param(
     [string]$Version = "",
@@ -8,86 +8,95 @@ param(
     [switch]$DryRun = $false
 )
 
-Write-Host "🚀 Git Lite CLI Release Script" -ForegroundColor Green
+Write-Host "Git Lite CLI Release Script" -ForegroundColor Green
 Write-Host "================================" -ForegroundColor Green
 
 # Check if we're in the right directory
 if (!(Test-Path "package.json")) {
-    Write-Host "❌ Error: package.json not found. Please run this script from the project root." -ForegroundColor Red
+    Write-Host "Error: package.json not found. Please run from project root." -ForegroundColor Red
     exit 1
 }
 
 # Get current version
-$packageJson = Get-Content "package.json" | ConvertFrom-Json
+$packageJson = Get-Content "package.json" -Raw | ConvertFrom-Json
 $currentVersion = $packageJson.version
 Write-Host "Current version: $currentVersion" -ForegroundColor Yellow
 
-# Update version if specified
+# Update version if specified (cross-platform npm version)
 if ($Version) {
     Write-Host "Updating version to: $Version" -ForegroundColor Yellow
-    npm version $Version --no-git-tag-version
+    & npm version $Version --no-git-tag-version
     if ($LASTEXITCODE -ne 0) {
-        Write-Host "❌ Failed to update version" -ForegroundColor Red
+        Write-Host "Failed to update version" -ForegroundColor Red
         exit 1
     }
+    $packageJson = Get-Content "package.json" -Raw | ConvertFrom-Json
+    $currentVersion = $packageJson.version
 }
 
 # Build the project
 if (!$SkipBuild) {
-    Write-Host "📦 Building project..." -ForegroundColor Blue
-    pnpm run build:clean
+    Write-Host "Building project..." -ForegroundColor Blue
+    & pnpm run build:clean
     if ($LASTEXITCODE -ne 0) {
-        Write-Host "❌ Build failed" -ForegroundColor Red
+        Write-Host "Build failed" -ForegroundColor Red
         exit 1
     }
-    Write-Host "✅ Build successful" -ForegroundColor Green
+    Write-Host "Build successful" -ForegroundColor Green
 }
 
 # Run tests
 if (!$SkipTests) {
-    Write-Host "🧪 Running tests..." -ForegroundColor Blue
-    pnpm run typecheck
+    Write-Host "Running tests..." -ForegroundColor Blue
+    & pnpm run typecheck
     if ($LASTEXITCODE -ne 0) {
-        Write-Host "❌ Type check failed" -ForegroundColor Red
+        Write-Host "Type check failed" -ForegroundColor Red
         exit 1
     }
-    pnpm run format:check
+    & pnpm run format:check
     if ($LASTEXITCODE -ne 0) {
-        Write-Host "❌ Format check failed" -ForegroundColor Red
+        Write-Host "Format check failed" -ForegroundColor Red
         exit 1
     }
-    Write-Host "✅ All checks passed" -ForegroundColor Green
+    Write-Host "All checks passed" -ForegroundColor Green
 }
 
+# Publish to npm
 if ($DryRun) {
-    Write-Host "🔍 Dry run mode - would publish to npm" -ForegroundColor Yellow
-    npm publish --dry-run
+    Write-Host "Dry run mode - would publish to npm" -ForegroundColor Yellow
+    & npm publish --dry-run
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "Dry run validation failed" -ForegroundColor Red
+        exit 1
+    }
 } else {
-    # Publish to npm (works for yarn, pnpm, bun automatically)
-    Write-Host "📤 Publishing to npm..." -ForegroundColor Blue
-    npm publish
+    Write-Host "Publishing to npm..." -ForegroundColor Blue
+    & npm publish
     if ($LASTEXITCODE -eq 0) {
-        Write-Host "✅ Published to npm successfully!" -ForegroundColor Green
-        Write-Host "📦 Package is now available on:" -ForegroundColor Green
-        Write-Host "   • npm: npm install -g git-lite-cli" -ForegroundColor Cyan
-        Write-Host "   • yarn: yarn global add git-lite-cli" -ForegroundColor Cyan  
-        Write-Host "   • pnpm: pnpm add -g git-lite-cli" -ForegroundColor Cyan
+        Write-Host "Published to npm successfully!" -ForegroundColor Green
+        Write-Host "Install commands:" -ForegroundColor Cyan
+        Write-Host "   npm install -g git-lite-cli" -ForegroundColor Cyan
+        Write-Host "   yarn global add git-lite-cli" -ForegroundColor Cyan
+        Write-Host "   pnpm add -g git-lite-cli" -ForegroundColor Cyan
     } else {
-        Write-Host "❌ npm publish failed" -ForegroundColor Red
+        Write-Host "npm publish failed" -ForegroundColor Red
         exit 1
     }
 }
 
 # Commit and tag if version was updated
 if ($Version -and !$DryRun) {
-    Write-Host "📝 Committing version update..." -ForegroundColor Blue
+    Write-Host "Committing version update..." -ForegroundColor Blue
     git add package.json
-    git commit -m "chore: bump version to $Version"
-    git tag "v$Version"
+    git commit -m "chore: bump version to $currentVersion"
+    git tag "v$currentVersion"
     git push origin main --tags
-    Write-Host "✅ Version committed and tagged" -ForegroundColor Green
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "Push failed - check permissions" -ForegroundColor Yellow
+    } else {
+        Write-Host "Version committed and tagged" -ForegroundColor Green
+    }
 }
 
 Write-Host ""
-Write-Host "🎉 Release completed successfully!" -ForegroundColor Green
-Write-Host "Package version: $($(Get-Content "package.json" | ConvertFrom-Json).version)" -ForegroundColor Yellow
+Write-Host "Release completed! Version: $currentVersion" -ForegroundColor Green
