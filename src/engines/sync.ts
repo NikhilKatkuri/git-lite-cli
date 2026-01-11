@@ -33,9 +33,11 @@ class glcSyncManager {
      * @returns Promise<void>
      */
 
-    public async run(options: synchOptions): Promise<void> {
+    public async run(
+        options: synchOptions,
+        skipIntro: boolean = false
+    ): Promise<void> {
         intro('Git Sync Operation')
-
         const { verbose = false, ...args } = options
         this.verbose = verbose
 
@@ -74,6 +76,19 @@ class glcSyncManager {
         }
     }
 
+    public async pilot(): Promise<void> {
+        await this.run(
+            {
+                noStash: false,
+                noPull: false,
+                noPush: false,
+                branch: '',
+                verbose: this.verbose,
+            },
+            true
+        )
+    }
+
     /**
      * Perform git pull operation.
      *
@@ -82,7 +97,7 @@ class glcSyncManager {
      */
 
     private async pull(noPull: boolean = false): Promise<void> {
-        if (!noPull) {
+        if (noPull) {
             verboseLog('Skipping pull operation.', this.verbose)
             return
         }
@@ -128,7 +143,7 @@ class glcSyncManager {
      */
 
     private async stash(noStash: boolean = false): Promise<void> {
-        if (!noStash) {
+        if (noStash) {
             verboseLog('Skipping stash operation.', this.verbose)
             return
         }
