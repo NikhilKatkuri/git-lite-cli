@@ -100,6 +100,7 @@ program
 
 program
     .command('create')
+    .description('Create a new repository')
     .option('--name [name]', 'Name of the new repository')
     .option(
         '--description [description]',
@@ -146,6 +147,7 @@ program
 
 program
     .command('save')
+    .description('Stage and commit changes to the repository')
     .option('-a, --all', 'Stages all changes (new, modified, deleted files),')
     .option(
         '-e, --exclude <files...>',
@@ -185,6 +187,7 @@ program
 
 program
     .command('sync')
+    .description('Synchronize local changes with the remote repository')
     .option('-b, --branch [branch]')
     .option('--no-pull', 'Skip pulling changes from the remote repository')
     .option('--no-push', 'Skip pushing changes to the remote repository')
@@ -210,6 +213,7 @@ program
 
 program
     .command('branch')
+    .description('Manage git branches')
     .option('-l, --list', 'List all branches')
     .option('-d, --delete <branch-name>', 'Delete a specified branch')
     .option(
@@ -244,6 +248,7 @@ program
 
 program
     .command('clone')
+    .description('Clone a repository into a new directory')
     .option('--url <repository-url>')
     .option('--dir [directory]')
     .option('--depth <depth>')
@@ -263,6 +268,7 @@ program
 
 program
     .command('ignore [template]')
+    .description('Manage .gitignore files using predefined templates')
     .option('--verbose, -V', 'Output detailed authentication information')
     .action(async (template, options) => {
         await trackCommand('ignore', () =>
@@ -309,6 +315,9 @@ program
 
 program
     .command('undo')
+    .description(
+        'Revert the most recent commit while keeping the changes staged'
+    )
     .option('--soft', 'Revert the last commit but keep changes staged')
     .option('--hard', 'Revert the last commit and discard all changes')
     .option('--amend', 'Revert the last commit and prepare to amend it')
@@ -331,6 +340,7 @@ program
 
 program
     .command('unstage')
+    .description('Unstage files that have been staged for commit')
     .option('--all', 'Unstage all staged files')
     .option('--file <file>', 'Unstage a specific file')
     .option('--staged', 'Unstage only files that are currently staged')
@@ -356,6 +366,9 @@ program
 
 program
     .command('recover [files...]')
+    .description(
+        'Restore deleted or modified files to their last committed state'
+    )
     .option('-i, --interactive', 'Interactively select files to recover')
     .option('--all', 'Recover all ignored files (requires confirmation)')
     .option('-n, --dry-run', 'Preview files that would be recovered')
@@ -379,9 +392,12 @@ program
  * Enhanced with glc-specific terminology and cleaner output formatting.
  */
 
-program.command('status').action(async () => {
-    await trackCommand('status', () => new glcStatusManager().run())
-})
+program
+    .command('status')
+    .description('Display the current status of the repository')
+    .action(async () => {
+        await trackCommand('status', () => new glcStatusManager().run())
+    })
 
 /**
  * size command
@@ -394,6 +410,7 @@ program.command('status').action(async () => {
 
 program
     .command('size')
+    .description('Analyze the repository size and identify large files')
     .option('-d, --details', 'Show detailed file breakdown')
     .option(
         '-l, --large [threshold]',
@@ -422,6 +439,7 @@ program
 
 program
     .command('doctor')
+    .description('Check the health of the repository and suggest fixes')
     .option('--fix', 'Automatically fix common issues where possible')
     .option('--detailed', 'Show detailed diagnostic information')
     .option('--verbose, -V', 'Output detailed diagnostic information')
