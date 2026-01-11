@@ -37,7 +37,8 @@
         }
     },
     "bin": {
-        "glc": "./dist/index.js"
+        "glc": "./dist/index.js",
+        "git-lite-cli": "./dist/index.js"
     },
     "files": [
         "dist/**/*",
