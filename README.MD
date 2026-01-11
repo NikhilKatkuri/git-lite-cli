@@ -2,21 +2,17 @@
 
 **A [Stratify Minds](https://github.com/NikhilKatkuri) Project**
 
-Git Lite CLI is a simple command line tool that makes Git easier to use. Developed as part of the Stratify Minds ecosystem, this tool transforms complex Git workflows into simple, clear commands that do what you expect.
+Git Lite CLI is a command line tool that aims to make Git easier to use. Developed as part of the Stratify Minds ecosystem, this tool provides simplified commands for common Git workflows.
 
-This tool helps you work with Git repositories without accidentally breaking things. It includes safety features and helpful guidance to keep your code safe while making common Git tasks much simpler.
+This tool includes features designed to help with Git repository management and aims to make common Git tasks more accessible.
 
 ## Why Use Git Lite CLI?
 
-Regular Git commands can be confusing and sometimes dangerous if you make a mistake. Git Lite CLI gives you simple commands that are hard to mess up. It automatically protects your work and gives you helpful suggestions when something goes wrong.
+Regular Git commands can be complex and intimidating for new users. Git Lite CLI provides simplified commands with clear naming conventions. It aims to provide a more approachable interface to common Git operations.
 
 ## About Stratify Minds
 
-Git Lite CLI is proudly developed under the **Stratify Minds** umbrella. Stratify Minds is focused on creating developer tools that simplify complex workflows and enhance productivity. Our mission is to build thoughtful, well-designed tools that make developers' lives easier.
-
-### Other Stratify Minds Projects
-
-This project is part of a growing ecosystem of developer tools. Stay tuned for more utilities and frameworks that share the same philosophy of simplicity, safety, and developer experience.
+Git Lite CLI is developed by Nikhil Katkuri under the Stratify Minds name.
 
 **Connect with Stratify Minds:**
 
@@ -63,7 +59,7 @@ Before using Git Lite CLI with GitHub repositories, you need to set up authentic
 
 ### Basic Usage
 
-Git Lite CLI uses simple commands that do exactly what their name suggests:
+Git Lite CLI uses simplified commands with clear naming:
 
 **Save your work:**
 
@@ -83,7 +79,7 @@ glc sync
 git-lite-cli sync
 ```
 
-This safely gets the latest changes from GitHub and merges them with your work.
+This fetches the latest changes from the remote repository and attempts to merge them with your work.
 
 **Check what's happening:**
 
@@ -93,7 +89,7 @@ glc status
 git-lite-cli status
 ```
 
-This shows you what files have changed and gives you helpful suggestions.
+This shows you what files have changed in your repository.
 
 **Download a repository:**
 
@@ -151,20 +147,22 @@ git-lite-cli undo
 Download a repository from GitHub to your computer.
 
 ```bash
-glc clone --url https://github.com/username/repo-name
+glc clone  https://github.com/username/repo-name
 # or
-git-lite-cli clone --url https://github.com/username/repo-name
+git-lite-cli clone https://github.com/username/repo-name
 ```
 
 **glc branch [name]** or **git-lite-cli branch [name]**
 Create, switch, or manage branches in your repository.
 
 ```bash
-glc branch              # see all branches
-glc branch -c new-feature  # create and switch to new branch
+glc branch                    # see all branches
+glc branch -c new-feature     # create new branch
+glc branch -s new-feature     # switch to branch
 # or
 git-lite-cli branch
 git-lite-cli branch -c new-feature
+git-lite-cli branch -s new-feature
 ```
 
 ### Repository Maintenance
@@ -179,23 +177,29 @@ git-lite-cli size
 ```
 
 **glc ignore [pattern]** or **git-lite-cli ignore [pattern]**
-Add files or patterns to .gitignore so Git ignores them.
+Add files or patterns to .gitignore or use predefined templates.
 
 ```bash
-glc ignore "*.log"      # ignore all log files
-glc ignore node_modules # ignore node_modules folder
+glc ignore "*.log"              # ignore all log files
+glc ignore node_modules         # ignore node_modules folder
+glc ignore -t Node.js           # use Node.js template
 # or
 git-lite-cli ignore "*.log"
 git-lite-cli ignore node_modules
+git-lite-cli ignore -t Node.js
 ```
 
-**glc recover** or **git-lite-cli recover**
+**glc recover [files...]** or **git-lite-cli recover [files...]**
 Try to recover deleted or lost files.
 
 ```bash
-glc recover filename.txt
+glc recover filename.txt        # recover specific file
+glc recover --all              # recover all files
+glc recover -i                 # interactive recovery
 # or
 git-lite-cli recover filename.txt
+git-lite-cli recover --all
+git-lite-cli recover -i
 ```
 
 **glc doctor** or **git-lite-cli doctor**
@@ -234,9 +238,9 @@ git-lite-cli auth
 1. Start working on something new:
 
 ```bash
-glc branch feature-name
+glc branch -c feature-name
 # or
-git-lite-cli branch feature-name
+git-lite-cli branch -c feature-name
 ```
 
 2. Make changes to your code, then save them:
@@ -293,11 +297,11 @@ git-lite-cli doctor
 
 ### Fixing Problems
 
-If something goes wrong, Git Lite CLI will give you helpful suggestions. You can also:
+If you encounter issues, you can try:
 
-- Run `glc doctor` (or `git-lite-cli doctor`) to check for and fix common problems
-- Run `glc status` (or `git-lite-cli status`) to understand what's happening
-- Run `glc recover filename` (or `git-lite-cli recover filename`) if you accidentally deleted a file
+- Run `glc doctor` (or `git-lite-cli doctor`) to check for common problems
+- Run `glc status` (or `git-lite-cli status`) to see the current repository state
+- Run `glc recover filename` (or `git-lite-cli recover filename`) to attempt file recovery
 
 ## Getting Help
 
