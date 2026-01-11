@@ -59,7 +59,10 @@
         "prepublishOnly": "npm run build:clean",
         "prepack": "npm run build",
         "release": "release-it",
-        "typecheck": "tsc --noEmit"
+        "typecheck": "tsc --noEmit",
+        "test:docker": "docker-compose up --build test-alpine test-ubuntu",
+        "test:docker:interactive": "docker-compose up --build glc-dev",
+        "test:install": "npm pack && npm install -g git-lite-cli-*.tgz"
     },
     "devDependencies": {
         "@tsconfig/node24": "^24.0.3",
