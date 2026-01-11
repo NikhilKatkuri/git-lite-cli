@@ -242,17 +242,21 @@ program
  */
 
 program
-    .command('clone')
+    .command('clone [url]')
     .description('Clone a repository into a new directory')
-    .option('--url <repository-url>')
     .option('--dir [directory]')
     .option('--depth <depth>')
     .option('--branch <branch>')
     .option('--single-branch')
     .option('--no-skip', 'Skip prompts and use provided options directly')
     .option('--verbose, -V', 'Output detailed authentication information')
-    .action(async (options) => {
-        await trackCommand('clone', () => new glcCloneManager().run(options))
+    .action(async (url, options, command) => {
+        if (!url) {
+            command.help()
+            return
+        }
+        const params = { url, ...options }
+        await trackCommand('clone', () => new glcCloneManager().run(params))
     })
 
 /**
@@ -262,12 +266,17 @@ program
  */
 
 program
-    .command('ignore [template]')
-    .description('Manage .gitignore files using predefined templates')
+    .command('ignore [pattern]')
+    .option('-t, --template [template]', 'Specify a .gitignore template to use')
     .option('--verbose, -V', 'Output detailed authentication information')
-    .action(async (template, options) => {
+    .description('Manage .gitignore files using predefined templates')
+    .action(async (pattern, options, command) => {
+        if (!pattern) {
+            command.help()
+            return
+        }
         await trackCommand('ignore', () =>
-            new glcIgnoreManager().run({ template, ...options })
+            new glcIgnoreManager().run({ pattern, ...options })
         )
     })
 

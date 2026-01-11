@@ -61,6 +61,13 @@ class glcIgnoreManager {
         this.verbose = options.verbose ?? false
 
         try {
+            // If a pattern is provided, add it to .gitignore
+            if (options.pattern) {
+                await this.addPatternToGitignore(options.pattern)
+                return
+            }
+
+            // Otherwise, handle template selection and application
             const template = options.template ?? (await this.getTemplateName())
             let templateContent = await this.fetchTemplate(template)
 
@@ -97,6 +104,38 @@ class glcIgnoreManager {
         }
 
         return template
+    }
+
+    /**
+     * Add a specific pattern to .gitignore file
+     * @param pattern - The pattern to add to .gitignore
+     */
+    private async addPatternToGitignore(pattern: string): Promise<void> {
+        const gitignorePath = path.join(process.cwd(), '.gitignore')
+        let gitignoreContent = ''
+
+        // Read existing .gitignore if it exists
+        if (existsSync(gitignorePath)) {
+            gitignoreContent = readFileSync(gitignorePath, 'utf-8')
+
+            // Check if pattern already exists
+            if (gitignoreContent.includes(pattern)) {
+                log.message(`Pattern '${pattern}' already exists in .gitignore`)
+                return
+            }
+        }
+
+        // Add the pattern with proper formatting
+        const newContent = gitignoreContent
+            ? `${gitignoreContent}\n\n# Added by glc ignore\n${pattern}\n`
+            : `# Added by glc ignore\n${pattern}\n`
+
+        writeFileSync(gitignorePath, newContent, 'utf-8')
+        log.success(`Added '${pattern}' to .gitignore`)
+        verboseLog(
+            `Pattern '${pattern}' added to ${gitignorePath}`,
+            this.verbose
+        )
     }
 
     /**

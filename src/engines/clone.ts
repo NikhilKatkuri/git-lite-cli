@@ -53,12 +53,6 @@ class glcCloneManager {
                 singleBranch: false,
             }
 
-            finalOptions.url = await this.promptToUser(
-                'Enter the repository URL to clone:',
-                finalOptions.url || '',
-                false
-            )
-
             finalOptions.dir = await this.getPath()
 
             const depthInput = await this.promptToUser(

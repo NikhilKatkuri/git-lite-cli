@@ -1,6 +1,7 @@
 type ignoreOptions = {
+    pattern?: string
     template?: string
-    verbose: boolean
+    verbose?: boolean
 }
 
 export type { ignoreOptions }
