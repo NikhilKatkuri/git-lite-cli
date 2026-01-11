@@ -38,7 +38,7 @@ This Code of Conduct applies within all project spaces, and also applies when an
 
 ## 5. Enforcement
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by contacting me at [Your Email Address]. All complaints will be reviewed and investigated promptly and fairly.
+Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by contacting the Stratify Minds team at gitlitecli07@gmail.com. All complaints will be reviewed and investigated promptly and fairly.
 
 I am committed to respecting the privacy and security of the reporter of any incident.
 

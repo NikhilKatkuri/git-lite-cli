@@ -1,12 +1,27 @@
 # Git Lite CLI [![npm version](https://img.shields.io/npm/v/git-lite-cli.svg)](https://www.npmjs.com/package/git-lite-cli) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Git Lite CLI is a simple command line tool that makes Git easier to use. Instead of remembering complex Git commands, you can use simple, clear commands that do what you expect.
+**A [Stratify Minds](https://github.com/NikhilKatkuri) Project**
+
+Git Lite CLI is a simple command line tool that makes Git easier to use. Developed as part of the Stratify Minds ecosystem, this tool transforms complex Git workflows into simple, clear commands that do what you expect.
 
 This tool helps you work with Git repositories without accidentally breaking things. It includes safety features and helpful guidance to keep your code safe while making common Git tasks much simpler.
 
 ## Why Use Git Lite CLI?
 
 Regular Git commands can be confusing and sometimes dangerous if you make a mistake. Git Lite CLI gives you simple commands that are hard to mess up. It automatically protects your work and gives you helpful suggestions when something goes wrong.
+
+## About Stratify Minds
+
+Git Lite CLI is proudly developed under the **Stratify Minds** umbrella. Stratify Minds is focused on creating developer tools that simplify complex workflows and enhance productivity. Our mission is to build thoughtful, well-designed tools that make developers' lives easier.
+
+### Other Stratify Minds Projects
+
+This project is part of a growing ecosystem of developer tools. Stay tuned for more utilities and frameworks that share the same philosophy of simplicity, safety, and developer experience.
+
+**Connect with Stratify Minds:**
+
+- GitHub: [@NikhilKatkuri](https://github.com/NikhilKatkuri)
+- Email: gitlitecli07@gmail.com
 
 ## Installation
 
@@ -334,4 +349,10 @@ This project uses the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ## Contributing
 
-We welcome help from other developers. If you find bugs or have ideas for improvements, please create an issue on the GitHub repository.
+We welcome help from other developers! Git Lite CLI is a Stratify Minds project, and we believe in building great tools through community collaboration. If you find bugs or have ideas for improvements, please:
+
+- Create an issue on the [GitHub repository](https://github.com/NikhilKatkuri/git-lite-cli)
+- Submit a pull request with your improvements
+- Read our [Contributing Guidelines](CONTRIBUTING.md) for more details
+
+For questions or suggestions about the broader Stratify Minds ecosystem, feel free to reach out directly.

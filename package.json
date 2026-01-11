@@ -1,7 +1,7 @@
 {
     "name": "git-lite-cli",
     "version": "3.0.0",
-    "description": "A high-performance, developer-friendly CLI tool designed to simplify complex Git workflows with safety and best practices built-in.",
+    "description": "A Stratify Minds project - A high-performance, developer-friendly CLI tool designed to simplify complex Git workflows with safety and best practices built-in.",
     "keywords": [
         "git",
         "cli",
@@ -9,7 +9,8 @@
         "version-control",
         "developer-tools",
         "git-workflow",
-        "git-assistant"
+        "git-assistant",
+        "stratify-minds"
     ],
     "homepage": "https://github.com/NikhilKatkuri/git-lite-cli#readme",
     "bugs": {
@@ -22,8 +23,9 @@
     "license": "MIT",
     "author": {
         "name": "Nikhil Katkuri",
-        "email": "nikhilkatkuri@gmail.com",
-        "url": "https://github.com/NikhilKatkuri"
+        "email": "gitlitecli07@gmail.com",
+        "url": "https://github.com/NikhilKatkuri",
+        "organization": "Stratify Minds"
     },
     "type": "module",
     "main": "./dist/index.js",
