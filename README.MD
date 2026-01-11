@@ -1,5 +1,20 @@
 # Git Lite CLI [![npm version](https://img.shields.io/npm/v/git-lite-cli.svg)](https://www.npmjs.com/package/git-lite-cli) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+<br/>
+<div align="center" style="display: flex; justify-content: center; align-items: center;">
+  <div>
+  <img src="brand/Stratify minds.svg" alt="Stratify Minds Logo" width="124">
+  <p>Stratify Minds</p>
+  </div>
+  &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+   <div>
+ <img src="brand/git-lite-cli.svg" alt="Git Lite CLI Logo" width="124"> <p>Git Lite CLI</p>
+  </div>
+  
+</div>
+
+<br/>
+
 **A [Stratify Minds](https://github.com/NikhilKatkuri) Project**
 
 Git Lite CLI is a command line tool that aims to make Git easier to use. Developed as part of the Stratify Minds ecosystem, this tool provides simplified commands for common Git workflows.
