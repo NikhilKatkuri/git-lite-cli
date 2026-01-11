@@ -43,6 +43,7 @@
     "files": [
         "dist/**/*",
         "README.md",
+        "AUTHENTICATION.md",
         "LICENSE",
         "SECURITY.md"
     ],
@@ -59,6 +60,9 @@
         "lint": "tsc --noEmit",
         "prepublishOnly": "npm run build:clean",
         "prepack": "npm run build",
+        "publish:npm": "npm publish",
+        "publish:all": "npm run build:clean && npm publish",
+        "release:script": "powershell -ExecutionPolicy Bypass -File ./scripts/release.ps1",
         "release": "release-it",
         "typecheck": "tsc --noEmit",
         "test:docker": "docker-compose up --build test-alpine test-ubuntu",
