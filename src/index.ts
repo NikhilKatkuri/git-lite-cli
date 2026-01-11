@@ -23,6 +23,7 @@ import glcStatusManager from './engines/status.js'
 import glcSizeManager from './engines/size.js'
 import glcDoctorManager from './engines/doctor.js'
 import trackCommand from './boom/queue.js'
+import glcPilot from './engines/pilot.js'
 
 /**
  * Main Program Setup
@@ -202,6 +203,7 @@ program
  * --rename, -r <new-name> : Rename the current branch to <new-name>
  * --create, -c <branch-name> : Create a new branch with the specified name
  * --switch, -s <branch-name> : Switch to the specified branch
+ * --rebase <base-branch> : Rebase current branch onto the specified base branch
  * below link for more details on git branch from the offical documentation of git
  * @see {@link https://git-scm.com/docs/git-branch} for more details
  */
@@ -219,6 +221,10 @@ program
         'Create a new branch with the specified name'
     )
     .option('-s, --switch <branch-name>', 'Switch to the specified branch')
+    .option(
+        '--rebase <base-branch>',
+        'Rebase current branch onto the specified base branch'
+    )
     .option('--verbose, -V', 'Output detailed authentication information')
     .action(async (options) => {
         await trackCommand('branch', () => new glcBranchManager().run(options))
@@ -262,6 +268,27 @@ program
         await trackCommand('ignore', () =>
             new glcIgnoreManager().run({ template, ...options })
         )
+    })
+
+/**
+ * autopilot command
+ * commit and push changes automatically to current branch only
+ */
+program
+    .command('autopilot')
+    .description('Auto commit and push changes')
+    .option('--verbose, -V', 'Output detailed operation information')
+    .option('--dry-run, -n', 'Preview what would be done without executing')
+    .action(async (options) => {
+        await trackCommand('autopilot', async () => {
+            if (options.dryRun) {
+                await trackCommand('autopilot', () => glcPilot.dryRun(options))
+            } else {
+                await trackCommand('autopilot', () =>
+                    glcPilot.quickRun(options)
+                )
+            }
+        })
     })
 
 /**
@@ -365,9 +392,18 @@ program.command('status').action(async () => {
  * --built by glc
  */
 
-program.command('size').action(async () => {
-    await trackCommand('size', () => new glcSizeManager().run())
-})
+program
+    .command('size')
+    .option('-d, --details', 'Show detailed file breakdown')
+    .option(
+        '-l, --large [threshold]',
+        'Highlight files larger than threshold (in MB, default: 10)'
+    )
+    .option('-t, --top [count]', 'Show top N largest files (default: 10)')
+    .option('--verbose, -V', 'Output detailed size information')
+    .action(async (options) => {
+        await trackCommand('size', () => new glcSizeManager().run(options))
+    })
 
 /**
  * doctor command
@@ -384,8 +420,13 @@ program.command('size').action(async () => {
  * - unused branches
  */
 
-program.command('doctor').action(async () => {
-    await trackCommand('doctor', () => new glcDoctorManager().run())
-})
+program
+    .command('doctor')
+    .option('--fix', 'Automatically fix common issues where possible')
+    .option('--detailed', 'Show detailed diagnostic information')
+    .option('--verbose, -V', 'Output detailed diagnostic information')
+    .action(async (options) => {
+        await trackCommand('doctor', () => new glcDoctorManager().run(options))
+    })
 
 program.parse(process.argv)
