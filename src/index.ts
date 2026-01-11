@@ -203,6 +203,7 @@ program
  * --rename, -r <new-name> : Rename the current branch to <new-name>
  * --create, -c <branch-name> : Create a new branch with the specified name
  * --switch, -s <branch-name> : Switch to the specified branch
+ * --rebase <base-branch> : Rebase current branch onto the specified base branch
  * below link for more details on git branch from the offical documentation of git
  * @see {@link https://git-scm.com/docs/git-branch} for more details
  */
@@ -220,6 +221,10 @@ program
         'Create a new branch with the specified name'
     )
     .option('-s, --switch <branch-name>', 'Switch to the specified branch')
+    .option(
+        '--rebase <base-branch>',
+        'Rebase current branch onto the specified base branch'
+    )
     .option('--verbose, -V', 'Output detailed authentication information')
     .action(async (options) => {
         await trackCommand('branch', () => new glcBranchManager().run(options))
@@ -415,8 +420,13 @@ program
  * - unused branches
  */
 
-program.command('doctor').action(async () => {
-    await trackCommand('doctor', () => new glcDoctorManager().run())
-})
+program
+    .command('doctor')
+    .option('--fix', 'Automatically fix common issues where possible')
+    .option('--detailed', 'Show detailed diagnostic information')
+    .option('--verbose, -V', 'Output detailed diagnostic information')
+    .action(async (options) => {
+        await trackCommand('doctor', () => new glcDoctorManager().run(options))
+    })
 
 program.parse(process.argv)

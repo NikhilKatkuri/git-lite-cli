@@ -158,6 +158,9 @@ class glcBranchManager {
             case 'delete':
                 await this.delete(action.value)
                 break
+            case 'rebase':
+                await this.rebase(action.value)
+                break
             default:
                 throw new Error('Invalid branch action.')
         }
@@ -291,6 +294,95 @@ class glcBranchManager {
         }
     }
 
+    /**
+     * Rebase current branch onto the specified base branch.
+     *
+     * @param baseBranch string - The branch to rebase onto
+     * @returns Promise<void>
+     */
+    private async rebase(baseBranch: string): Promise<void> {
+        try {
+            const currentBranch = await this.getCurrentBranchName()
+
+            if (currentBranch === baseBranch) {
+                log.error(`Cannot rebase '${currentBranch}' onto itself.`)
+                return
+            }
+
+            verboseLog(
+                `Rebasing '${currentBranch}' onto '${baseBranch}' ....`,
+                this.verbose
+            )
+
+            // Check if the base branch exists
+            try {
+                await execa('git', ['rev-parse', '--verify', baseBranch])
+            } catch {
+                log.error(`Branch '${baseBranch}' does not exist.`)
+                return
+            }
+
+            // Check for uncommitted changes
+            const { stdout: status } = await execa('git', [
+                'status',
+                '--porcelain',
+            ])
+            if (status.trim()) {
+                log.warn('You have uncommitted changes.')
+                const shouldStash = await this.confirmationToUser(
+                    'Would you like to stash your changes before rebasing?'
+                )
+                if (shouldStash) {
+                    await execa('git', [
+                        'stash',
+                        'push',
+                        '-m',
+                        `Auto-stash before rebasing onto ${baseBranch}`,
+                    ])
+                    log.info('Changes stashed successfully.')
+                } else {
+                    log.error(
+                        'Rebase cancelled. Please commit or stash your changes first.'
+                    )
+                    return
+                }
+            }
+
+            // Perform the rebase
+            await execa('git', ['rebase', baseBranch])
+            log.info(
+                `Successfully rebased '${currentBranch}' onto '${baseBranch}'.`
+            )
+
+            // If we stashed changes, ask if user wants to pop them
+            if (status.trim()) {
+                const shouldPop = await this.confirmationToUser(
+                    'Would you like to restore your stashed changes?'
+                )
+                if (shouldPop) {
+                    try {
+                        await execa('git', ['stash', 'pop'])
+                        log.info('Stashed changes restored successfully.')
+                    } catch {
+                        log.warn(
+                            'Could not restore stashed changes automatically. You can restore them manually with: git stash pop'
+                        )
+                    }
+                }
+            }
+        } catch (error) {
+            log.error(
+                'Rebase failed. You may need to resolve conflicts manually.'
+            )
+            log.info('Use the following commands to resolve conflicts:')
+            log.info('  1. Edit conflicted files')
+            log.info('  2. git add <resolved-files>')
+            log.info('  3. git rebase --continue')
+            log.info('  Or abort the rebase with: git rebase --abort')
+            handleError(error, this.verbose)
+        }
+    }
+
     private async getCurrentBranchName(): Promise<string> {
         try {
             const { stdout: currentBranch } = await execa('git', [
@@ -345,6 +437,7 @@ class glcBranchManager {
                 { value: 'rename', label: 'Rename Branch' },
                 { value: 'switch', label: 'Switch Branch' },
                 { value: 'delete', label: 'Delete Branch' },
+                { value: 'rebase', label: 'Rebase Branch' },
             ],
         })
 

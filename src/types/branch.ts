@@ -1,9 +1,10 @@
-type branchtype = 'list' | 'create' | 'switch' | 'delete' | 'rename'
+type branchtype = 'list' | 'create' | 'switch' | 'delete' | 'rename' | 'rebase'
 
 type branchMap = {
     create: string
     switch: string
     delete: string
+    rebase: string
 }
 
 type branch = {
