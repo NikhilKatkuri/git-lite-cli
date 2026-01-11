@@ -1,49 +1,49 @@
-version: "3.8"
+version: '3.8'
 
 services:
-  # Test on Alpine Linux
-  test-alpine:
-    build:
-      context: .
-      target: test
-    volumes:
-      - .:/workspace:ro
-    working_dir: /workspace
+    # Test on Alpine Linux
+    test-alpine:
+        build:
+            context: .
+            target: test
+        volumes:
+            - .:/workspace:ro
+        working_dir: /workspace
 
-  # Test on Ubuntu
-  test-ubuntu:
-    image: node:18
-    volumes:
-      - .:/workspace
-    working_dir: /workspace
-    command: |
-      bash -c "
-        apt-get update && apt-get install -y git
-        npm install -g pnpm@9.0.0
-        pnpm install
-        pnpm run build
-        npm pack
-        npm install -g git-lite-cli-*.tgz
-        mkdir /tmp/test && cd /tmp/test
-        git init
-        git config user.name 'Test User'
-        git config user.email 'test@example.com'
-        echo '# Test' > README.md
-        glc save 'Initial commit'
-        glc status
-        glc branch --list
-      "
+    # Test on Ubuntu
+    test-ubuntu:
+        image: node:18
+        volumes:
+            - .:/workspace
+        working_dir: /workspace
+        command: |
+            bash -c "
+              apt-get update && apt-get install -y git
+              npm install -g pnpm@9.0.0
+              pnpm install
+              pnpm run build
+              npm pack
+              npm install -g git-lite-cli-*.tgz
+              mkdir /tmp/test && cd /tmp/test
+              git init
+              git config user.name 'Test User'
+              git config user.email 'test@example.com'
+              echo '# Test' > README.md
+              glc save 'Initial commit'
+              glc status
+              glc branch --list
+            "
 
-  # Interactive testing environment
-  glc-dev:
-    build:
-      context: .
-      target: production
-    volumes:
-      - test-repos:/repos
-    working_dir: /repos
-    stdin_open: true
-    tty: true
+    # Interactive testing environment
+    glc-dev:
+        build:
+            context: .
+            target: production
+        volumes:
+            - test-repos:/repos
+        working_dir: /repos
+        stdin_open: true
+        tty: true
 
 volumes:
-  test-repos:
+    test-repos:
