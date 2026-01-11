@@ -1,4 +1,4 @@
-type branchtype = 'list' | 'create' | 'switch' | 'delete' | 'rename' | 'rebase'
+type branchtype = 'create' | 'switch' | 'delete' | 'rename' | 'rebase'
 
 type branchMap = {
     create: string
@@ -8,7 +8,7 @@ type branchMap = {
 }
 
 type branch = {
-    name: branchtype & Omit<branchtype, 'list'>
+    name: branchtype
     value: string
 }
 type branchOption = branchMap & { verbose: boolean; list: boolean }

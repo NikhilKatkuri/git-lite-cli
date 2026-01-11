@@ -210,7 +210,6 @@ program
 program
     .command('branch')
     .description('Manage git branches')
-    .option('-l, --list', 'List all branches')
     .option('-d, --delete <branch-name>', 'Delete a specified branch')
     .option(
         '-r, --rename <new-name>',

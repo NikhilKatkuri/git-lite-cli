@@ -68,9 +68,9 @@ Git Lite CLI uses simple commands that do exactly what their name suggests:
 **Save your work:**
 
 ```bash
-glc save "describe what you changed"
+glc save -m "describe what you changed"
 # or
-git-lite-cli save "describe what you changed"
+git-lite-cli save -m "describe what you changed"
 ```
 
 This stages all your changes and creates a commit with your message.
@@ -105,7 +105,7 @@ git-lite-cli clone https://github.com/username/repository-name
 
 This downloads a GitHub repository to your computer.
 
-## All Commands
+## Available Commands
 
 ### Working With Your Code
 
@@ -113,9 +113,9 @@ This downloads a GitHub repository to your computer.
 Save your changes with a description of what you did.
 
 ```bash
-glc save "fixed the login bug"
+glc save -m "fixed the login bug"
 # or
-git-lite-cli save "fixed the login bug"
+git-lite-cli save -m "fixed the login bug"
 ```
 
 **glc sync** or **git-lite-cli sync**
@@ -151,20 +151,20 @@ git-lite-cli undo
 Download a repository from GitHub to your computer.
 
 ```bash
-glc clone https://github.com/username/repo-name
+glc clone --url https://github.com/username/repo-name
 # or
-git-lite-cli clone https://github.com/username/repo-name
+git-lite-cli clone --url https://github.com/username/repo-name
 ```
 
-**glc branch** or **git-lite-cli branch**
+**glc branch [name]** or **git-lite-cli branch [name]**
 Create, switch, or manage branches in your repository.
 
 ```bash
-glc branch          # see all branches
-glc branch new-feature  # create and switch to new branch
+glc branch              # see all branches
+glc branch -c new-feature  # create and switch to new branch
 # or
 git-lite-cli branch
-git-lite-cli branch new-feature
+git-lite-cli branch -c new-feature
 ```
 
 ### Repository Maintenance
@@ -242,9 +242,9 @@ git-lite-cli branch feature-name
 2. Make changes to your code, then save them:
 
 ```bash
-glc save "added new feature"
+glc save -m "added new feature"
 # or
-git-lite-cli save "added new feature"
+git-lite-cli save -m "added new feature"
 ```
 
 3. Get latest changes and upload yours:
@@ -305,7 +305,12 @@ If you need help with a specific command, add `--help` after any command:
 
 ```bash
 glc save --help
+glc sync --help
+glc status --help
+# or
+git-lite-cli save --help
 git-lite-cli sync --help
+git-lite-cli status --help
 ```
 
 For problems or questions:

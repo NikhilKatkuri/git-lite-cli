@@ -42,11 +42,11 @@ class glcBranchManager {
      */
 
     public async run(options: branchOption): Promise<void> {
-        intro('Git Branch Management')
-        const { verbose = false, list = false, ...args } = options
+        const { verbose = false, ...args } = options
         this.verbose = verbose
+        intro('git-lite-cli - Branch Manager')
 
-        if (list) {
+        if (!args || Object.keys(args).length === 0) {
             verboseLog('Listing branches ....', this.verbose)
             await this.list()
             outro('Branch listing completed.')
@@ -60,7 +60,10 @@ class glcBranchManager {
                 verboseLog(`Handling action: ${action.name} ....`, this.verbose)
                 await this.handleAction(action)
             }
-            outro('Branch operation completed.')
+
+            if (this.verbose) {
+                outro('Branch operation completed.')
+            }
         } catch (error) {
             handleError(error, this.verbose)
         }
@@ -82,10 +85,6 @@ class glcBranchManager {
 
             // Prompt user for action
             const actionInput = await this.promptToUserForAction()
-            if (actionInput === 'list') {
-                await this.list()
-                return
-            }
 
             // Prompt, get branch name
             const branchName = await this.getBranchNameFromUser(
@@ -198,11 +197,9 @@ class glcBranchManager {
             })
 
             log.info('Branch Overview:')
-            console.log()
 
             if (currentBranch) {
                 log.success(`Current Branch: ${currentBranch}`)
-                console.log()
             }
 
             if (localBranches.length > 0) {
@@ -214,7 +211,6 @@ class glcBranchManager {
                         console.log(`   ${branch}`)
                     }
                 })
-                console.log()
             }
 
             if (remoteBranches.length > 0) {
